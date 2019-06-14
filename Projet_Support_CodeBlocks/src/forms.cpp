@@ -131,14 +131,41 @@ void Planche::render()
 
     glBegin(GL_QUADS);
     {
+           //face dessous
         glVertex3d(p1.x, p1.y, p1.z);
         glVertex3d(p2.x, p2.y, p2.z);
         glVertex3d(p3.x, p3.y, p3.z);
         glVertex3d(p4.x, p4.y, p4.z);
+
+        //face dessus
         glVertex3d(p5.x, p5.y, p5.z);
         glVertex3d(p6.x, p6.y, p6.z);
         glVertex3d(p7.x, p7.y, p7.z);
         glVertex3d(p8.x, p8.y, p8.z);
+
+        //face coté un
+        glVertex3d(p6.x, p6.y, p6.z);
+        glVertex3d(p2.x, p2.y, p2.z);
+        glVertex3d(p3.x, p3.y, p3.z);
+        glVertex3d(p7.x, p7.y, p7.z);
+
+        //face coté deux
+        glVertex3d(p6.x, p6.y, p6.z);
+        glVertex3d(p2.x, p2.y, p2.z);
+        glVertex3d(p1.x, p1.y, p1.z);
+        glVertex3d(p5.x, p5.y, p5.z);
+
+        //face coté trois
+        glVertex3d(p8.x, p8.y, p8.z);
+        glVertex3d(p4.x, p4.y, p4.z);
+        glVertex3d(p1.x, p1.y, p1.z);
+        glVertex3d(p5.x, p5.y, p5.z);
+
+        //face coté quatre
+        glVertex3d(p8.x, p8.y, p8.z);
+        glVertex3d(p4.x, p4.y, p4.z);
+        glVertex3d(p3.x, p3.y, p3.z);
+        glVertex3d(p7.x, p7.y, p7.z);
     }
     glEnd();
 }
@@ -223,3 +250,34 @@ void Cube::render(){
         glPopMatrix();
     }
 }
+
+Rotule::Rotule(Point centre)
+{
+    anim.setPos(centre);
+    col = Color(1, 1, 0);
+}
+
+void Rotule::render()
+{
+    double base = 0.5 ;
+    double top = 0;
+    double height = 2;
+    Color col ;
+    GLint slices=20;
+    GLint stacks=1;
+
+    GLUquadric *quad;
+    quad = gluNewQuadric();
+    Form::render();
+    glPushMatrix();
+    glRotated(90,-1,0,0);
+    glTranslated(0,0,-2);
+
+    gluCylinder(quad, base, top, height, slices, stacks);
+    gluDeleteQuadric(quad);
+    glPopMatrix();
+}
+ void Rotule::update(double delta_t)
+ {
+     //
+ }

@@ -43,7 +43,16 @@ public:
     Point getPosition();
     double getPoids();
 };
-
+// A face of a cube
+class Rotule : public Form
+{
+private:
+    Point centre;
+public:
+    Rotule(Point centre);
+    void render();
+    void update(double delta_t);
+};
 
 // A particular Form
 class Sphere : public Form

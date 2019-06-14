@@ -151,7 +151,7 @@ void update(Planche* planche, Form* formlist[MAX_FORMS_NUMBER], double delta_t)
     planche->update(delta_t);
 }
 
-const void render(Planche* planche,Form* formlist[MAX_FORMS_NUMBER], Animation &cam_pos)
+const void render(Rotule* r1,Planche* planche,Form* formlist[MAX_FORMS_NUMBER], Animation &cam_pos)
 {
     // Clear color buffer and Z-Buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -262,6 +262,19 @@ int main(int argc, char* args[])
         forms_list[number_of_forms] = cube_un;
         number_of_forms++;
 
+        /****    Creation de la Rotule *****/
+
+        double x2=0;
+        double y2=0;
+        double z2=0;
+
+        Point pt2 = Point(x2,y2,z2);
+
+        Rotule *r1 = NULL;
+        r1 = new Rotule(pt2);
+        forms_list[number_of_forms] = r1;
+        number_of_forms++;
+
         // Get first "current time"
         previous_time = SDL_GetTicks();
         // While application is running
@@ -321,7 +334,7 @@ int main(int argc, char* args[])
             }
 
             // Render the scene
-            render(planche, forms_list, camera_position);
+            render(r1,planche, forms_list, camera_position);
 
             // Update window screen
             SDL_GL_SwapWindow(gWindow);
