@@ -5,6 +5,9 @@
 #include "animation.h"
 
 
+#define MAX_FORMS_NUMBER 10
+#define GRAVITE 9.8
+
 class Color
 {
 public:
@@ -26,6 +29,7 @@ class Form
 protected:
     Color col;
     Animation anim;
+    double poids;
 public:
     Animation& getAnim() {return anim;}
     void setAnim(Animation ani) {anim = ani;}
@@ -36,6 +40,8 @@ public:
     virtual void update(double delta_t) = 0;
     // Virtual method : Form is a generic type, only setting color and reference position
     virtual void render();
+    Point getPosition();
+    double getPoids();
 };
 
 
@@ -67,6 +73,48 @@ public:
           Color cl = Color());
     void update(double delta_t);
     void render();
+};
+
+class Planche : public Form
+{
+public:
+    Planche(Point org = Point());
+    void update(double delta_t);
+    void render();
+    void calculOrientation(Form* formlist[MAX_FORMS_NUMBER]);
+};
+
+// Cube
+class Cube : public Form
+{
+private:
+    Vector V1;
+    Vector V2;
+    Vector V3;
+    Point centreGrav;
+    Cube_face* faces[6];
+    float poids;
+public:
+    // methodes des vecteurs
+    Cube(Vector v1,Vector v2,Vector v3,Point centreGravite,float p);
+    void setV1(Vector* v1);
+    void setV2(Vector* v2);
+    void setV3(Vector* v3);
+    Vector getVectorV1();
+    Vector getVectorV2();
+    Vector getVectorV3();
+    // methodes du centre de gravite
+    void setCentreGrav(Point* point);
+    Point getCentreGrav();
+    // methodes du poids
+    void setPoids(float* p);
+    float getPoids();
+
+    //ABSTRACTION
+    void update(double delta_t);
+    void render();
+
+
 };
 
 #endif // FORMS_H_INCLUDED

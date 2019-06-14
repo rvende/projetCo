@@ -21,8 +21,6 @@ using namespace std;
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
-// Max number of forms : static allocation
-const int MAX_FORMS_NUMBER = 10;
 
 // Animation actualization delay (in ms) => 100 updates per second
 const Uint32 ANIM_DELAY = 10;
@@ -35,10 +33,10 @@ bool init(SDL_Window** window, SDL_GLContext* context);
 bool initGL();
 
 // Updating forms for animation
-void update(Form* formlist[MAX_FORMS_NUMBER], double delta_t);
+void update(Planche* planche, Form* formlist[MAX_FORMS_NUMBER], double delta_t);
 
 // Renders scene to the screen
-const void render(Form* formlist[MAX_FORMS_NUMBER], const Point &cam_pos);
+const void render(Planche* planche, Form* formlist[MAX_FORMS_NUMBER], const Point &cam_pos);
 
 // Frees media and shuts down SDL
 void close(SDL_Window** window);
@@ -141,7 +139,7 @@ bool initGL()
     return success;
 }
 
-void update(Form* formlist[MAX_FORMS_NUMBER], double delta_t)
+void update(Planche* planche, Form* formlist[MAX_FORMS_NUMBER], double delta_t)
 {
     // Update the list of forms
     unsigned short i = 0;
@@ -150,9 +148,10 @@ void update(Form* formlist[MAX_FORMS_NUMBER], double delta_t)
         formlist[i]->update(delta_t);
         i++;
     }
+    planche->update(delta_t);
 }
 
-const void render(Form* formlist[MAX_FORMS_NUMBER],Animation &cam_pos)
+const void render(Planche* planche,Form* formlist[MAX_FORMS_NUMBER], Animation &cam_pos)
 {
     // Clear color buffer and Z-Buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -161,12 +160,11 @@ const void render(Form* formlist[MAX_FORMS_NUMBER],Animation &cam_pos)
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
 
-    // Set the camera position and parameters
-    //cam_pos.setPhi(cam_pos.getPhi()+10);
     Point pos = cam_pos.getPos();
-    double xDes = 5.0 * cos(cam_pos.getTheta()*3.14159/180)* sin(cam_pos.getPhi()*3.14159/180)*cam_pos.getSpeed().x;
-    double yDes = 5.0 * sin(cam_pos.getTheta()*3.14159/180)*cam_pos.getSpeed().y;
-    double zDes = 5.0 * cos(cam_pos.getTheta()*3.14159/180)*cos(cam_pos.getPhi()*3.14159/180)*cam_pos.getSpeed().z;
+    Point referentiel = Point(0.0,0.0,0.0);
+    double xDes = distance(pos,referentiel) * cos(cam_pos.getTheta()*3.14159/180)* sin(cam_pos.getPhi()*3.14159/180)*cam_pos.getSpeed().x;
+    double yDes = distance(pos,referentiel) * sin(cam_pos.getTheta()*3.14159/180)*cam_pos.getSpeed().y;
+    double zDes = distance(pos,referentiel) * cos(cam_pos.getTheta()*3.14159/180)*cos(cam_pos.getPhi()*3.14159/180)*cam_pos.getSpeed().z;
     //Point pos = cam_pos.getPos();
     gluLookAt(xDes,yDes,zDes,0.0,0.0,0.0,0.0,1.0,0.0);
     // Isometric view
@@ -192,29 +190,17 @@ const void render(Form* formlist[MAX_FORMS_NUMBER],Animation &cam_pos)
     glPopMatrix(); // Restore the camera viewing point for next object
 
     // Render the list of forms
-    unsigned short i = 0;
-    while(formlist[i] != NULL)
+    glPushMatrix();
+    planche->render();
+    unsigned int i = 0;
+    while (formlist[i]!= NULL)
     {
-        //if(i<6){
-            glPushMatrix(); // Preserve the camera viewing point for further forms
-            //glTranslated(0,2,4);
-            glScaled(0.5,0.5,0.5);
-            formlist[i]->render();
-            glPopMatrix(); // Restore the camera viewing point for next object
-        //}else if(i == 6){
-        /*    glPushMatrix();
-            glScaled(0.5,0.5,0.5);
-            glTranslated(-8,4,1);
-            formlist[i]->render();
-            glPopMatrix();
-        //}else if(i == 7){
-            glPushMatrix();
-            glTranslated(5,1,4);
-            formlist[i]->render();
-            glPopMatrix();
-        //}*/
+        glPushMatrix(); // Preserve the camera viewing point for further forms
+        formlist[i]->render();
+        glPopMatrix(); // Restore the camera viewing point for next object
         i++;
     }
+    glPopMatrix();
 }
 
 void close(SDL_Window** window)
@@ -255,8 +241,8 @@ int main(int argc, char* args[])
         SDL_Event event;
 
         // Camera position
-        //Point camera_position(0.0, 0.0, 3.0);
-        Animation camera_position= Animation(0.33,0,Vector(0,0,0),Vector(1,1,1),Point(0,0,5));
+        //Point camera_position(0, 0, 7.0);
+        Animation camera_position= Animation(0.33,0,Vector(0,0,0),Vector(1,1,1),Point(0,0,25));
 
         // The forms to render
         Form* forms_list[MAX_FORMS_NUMBER];
@@ -265,53 +251,17 @@ int main(int argc, char* args[])
         {
             forms_list[i] = NULL;
         }
-        // Create here specific forms and add them to the list...
-        // Don't forget to update the actual number_of_forms !
-        Cube_face *pfirst_face = NULL;
-        pfirst_face = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-0.5, -0.5, -0.5));
-        forms_list[number_of_forms] = pfirst_face;
+
+        // Création de la planche
+        Planche *planche = NULL;
+        planche = new Planche(Point(0.0,0.0,0.0));
+
+        //Création des objets
+        Cube *cube_un = NULL;
+        cube_un = new Cube(Vector(1,0,0),Vector(0,1,0),Vector(0,0,1),Point(0.0,1,0.0),1);
+        forms_list[number_of_forms] = cube_un;
         number_of_forms++;
 
-        Cube_face *psecond_face = NULL;
-        psecond_face = new Cube_face(Vector(1,0,0), Vector(0,1,0), Point(-0.5, -0.5, 0.5));
-        forms_list[number_of_forms] = psecond_face;
-        number_of_forms++;
-
-        Cube_face *pthird_face = NULL;
-        pthird_face = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-0.5, 0.5, -0.5));
-        forms_list[number_of_forms] = pthird_face;
-        number_of_forms++;
-
-        Cube_face *pquatre_face = NULL;
-        pquatre_face = new Cube_face(Vector(1,0,0), Vector(0,0,1), Point(-0.5, -0.5, -0.5));
-        forms_list[number_of_forms] = pquatre_face;
-        number_of_forms++;
-
-        Cube_face *pcinq_face = NULL;
-        pcinq_face = new Cube_face(Vector(0,1,0), Vector(0,0,1), Point(-0.5, -0.5, -0.5));
-        forms_list[number_of_forms] = pcinq_face;
-        number_of_forms++;
-
-        Cube_face *psix_face = NULL;
-        psix_face = new Cube_face(Vector(0,1,0), Vector(0,0,1), Point(0.5, -0.5, -0.5));
-        forms_list[number_of_forms] = psix_face;
-        number_of_forms++;
-
-        Animation an1 = Animation(1,1,Vector(0,0,0),Vector(0,0,0),Point(0,2,0));
-        Animation an2 = Animation(1,1,Vector(0,0,0),Vector(0,0,0),Point(2,0,0));
-        Color vert =  Color(0,255,0);
-        Color jaune = Color(255,255,0);
-        Sphere *pFirstSphere = NULL;
-        Sphere *pSecondSphere = NULL;
-
-        pFirstSphere = new Sphere(0.5,vert);
-        pFirstSphere->setAnim(an1);
-        forms_list[number_of_forms] = pFirstSphere;
-        number_of_forms++;
-
-        pSecondSphere = new Sphere(0.5,jaune);
-        pSecondSphere->setAnim(an2);
-        forms_list[number_of_forms] = pSecondSphere;
         // Get first "current time"
         previous_time = SDL_GetTicks();
         // While application is running
@@ -340,11 +290,17 @@ int main(int argc, char* args[])
                     case SDLK_ESCAPE:
                         quit = true;
                         break;
-                    case SDLK_p:
+                    case SDLK_UP:
+                        camera_position.setTheta(camera_position.getTheta()+10);
+                        break;
+                    case SDLK_DOWN:
+                        camera_position.setTheta(camera_position.getTheta()-10);
+                        break;
+                    case SDLK_RIGHT:
                         camera_position.setPhi(camera_position.getPhi()+10);
                         break;
-                    case SDLK_o:
-                        camera_position.setTheta(camera_position.getTheta()+10);
+                    case SDLK_LEFT:
+                        camera_position.setPhi(camera_position.getPhi()-10);
                         break;
                     default:
                         break;
@@ -358,17 +314,14 @@ int main(int argc, char* args[])
             // Update the scene
             current_time = SDL_GetTicks(); // get the elapsed time from SDL initialization (ms)
             elapsed_time = current_time - previous_time;
-
             if (elapsed_time > ANIM_DELAY)
             {
-
-                //cout << "Time : " << elapsed_time<< endl;
                 previous_time = current_time;
-                update(forms_list, 1e-3 * elapsed_time); // International system units : seconds
+                update(planche, forms_list, 1e-3 * elapsed_time); // International system units : seconds
             }
 
             // Render the scene
-            render(forms_list,camera_position);
+            render(planche, forms_list, camera_position);
 
             // Update window screen
             SDL_GL_SwapWindow(gWindow);
