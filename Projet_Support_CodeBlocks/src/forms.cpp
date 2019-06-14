@@ -34,7 +34,10 @@ Sphere::Sphere(double r, Color cl)
 
 void Sphere::update(double delta_t)
 {
-    // Complete this part
+    Point p = anim.getPos();
+    p.x = p.x* cos(anim.getTheta())*sin(anim.getPhi())*anim.getSpeed().x*delta_t;
+
+
 }
 
 

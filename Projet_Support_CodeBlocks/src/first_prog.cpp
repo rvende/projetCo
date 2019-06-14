@@ -152,7 +152,7 @@ void update(Form* formlist[MAX_FORMS_NUMBER], double delta_t)
     }
 }
 
-const void render(Form* formlist[MAX_FORMS_NUMBER], const Point &cam_pos)
+const void render(Form* formlist[MAX_FORMS_NUMBER],Animation &cam_pos)
 {
     // Clear color buffer and Z-Buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -162,10 +162,16 @@ const void render(Form* formlist[MAX_FORMS_NUMBER], const Point &cam_pos)
     glLoadIdentity();
 
     // Set the camera position and parameters
-    gluLookAt(cam_pos.x,cam_pos.y,cam_pos.z, 0.0,0.0,0.0, 0.0,1.0,0.0);
+    //cam_pos.setPhi(cam_pos.getPhi()+10);
+    Point pos = cam_pos.getPos();
+    double xDes = 5.0 * cos(cam_pos.getTheta()*3.14159/180)* sin(cam_pos.getPhi()*3.14159/180)*cam_pos.getSpeed().x;
+    double yDes = 5.0 * sin(cam_pos.getTheta()*3.14159/180)*cam_pos.getSpeed().y;
+    double zDes = 5.0 * cos(cam_pos.getTheta()*3.14159/180)*cos(cam_pos.getPhi()*3.14159/180)*cam_pos.getSpeed().z;
+    //Point pos = cam_pos.getPos();
+    gluLookAt(xDes,yDes,zDes,0.0,0.0,0.0,0.0,1.0,0.0);
     // Isometric view
     glRotated(-45, 0, 1, 0);
-    glRotated(30, 1, 0, -1);
+    //glRotated(30, 1, 0, -1);
 
     // X, Y and Z axis
     glPushMatrix(); // Preserve the camera viewing point for further forms
@@ -249,7 +255,8 @@ int main(int argc, char* args[])
         SDL_Event event;
 
         // Camera position
-        Point camera_position(0.0, 0.0, 3.0);
+        //Point camera_position(0.0, 0.0, 3.0);
+        Animation camera_position= Animation(0.33,0,Vector(0,0,0),Vector(1,1,1),Point(0,0,5));
 
         // The forms to render
         Form* forms_list[MAX_FORMS_NUMBER];
@@ -333,7 +340,12 @@ int main(int argc, char* args[])
                     case SDLK_ESCAPE:
                         quit = true;
                         break;
-
+                    case SDLK_p:
+                        camera_position.setPhi(camera_position.getPhi()+10);
+                        break;
+                    case SDLK_o:
+                        camera_position.setTheta(camera_position.getTheta()+10);
+                        break;
                     default:
                         break;
                     }
@@ -349,14 +361,14 @@ int main(int argc, char* args[])
 
             if (elapsed_time > ANIM_DELAY)
             {
-                pFirstSphere->setAnim(Animation(2,3,Vector(1,0,0),Vector(0,1,0),Point(0,2,0)));
+
                 //cout << "Time : " << elapsed_time<< endl;
                 previous_time = current_time;
                 update(forms_list, 1e-3 * elapsed_time); // International system units : seconds
             }
 
             // Render the scene
-            render(forms_list, camera_position);
+            render(forms_list,camera_position);
 
             // Update window screen
             SDL_GL_SwapWindow(gWindow);
