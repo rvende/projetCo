@@ -165,9 +165,9 @@ const void render(Rotule* rotule,Planche* planche, Form* formlist[MAX_FORMS_NUMB
 
     Point pos = cam_pos.getPos();
     Point referentiel = Point(0.0,0.0,0.0);
-    double xDes = distance(pos,referentiel) * cos(cam_pos.getTheta()*3.14159/180)* sin(cam_pos.getPhi()*3.14159/180)*cam_pos.getSpeed().x;
-    double yDes = distance(pos,referentiel) * sin(cam_pos.getTheta()*3.14159/180)*cam_pos.getSpeed().y;
-    double zDes = distance(pos,referentiel) * cos(cam_pos.getTheta()*3.14159/180)*cos(cam_pos.getPhi()*3.14159/180)*cam_pos.getSpeed().z;
+    double xDes = dist(pos,referentiel) * cos(cam_pos.getTheta()*3.14159/180)* sin(cam_pos.getPhi()*3.14159/180)*cam_pos.getSpeed().x;
+    double yDes = dist(pos,referentiel) * sin(cam_pos.getTheta()*3.14159/180)*cam_pos.getSpeed().y;
+    double zDes = dist(pos,referentiel) * cos(cam_pos.getTheta()*3.14159/180)*cos(cam_pos.getPhi()*3.14159/180)*cam_pos.getSpeed().z;
     //Point pos = cam_pos.getPos();
     gluLookAt(xDes,yDes,zDes,0.0,0.0,0.0,0.0,1.0,0.0);
     // Isometric view

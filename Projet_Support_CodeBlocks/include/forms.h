@@ -105,10 +105,12 @@ private:
     float poids;
 public:
     // methodes des vecteurs
-    Cube(Vector v1,Vector v2,Vector v3,Point centreGravite,float p);
+    Cube(Vector v1,Vector v2,Vector v3,Point centreGravite,float p,Color cl);
     void setV1(Vector* v1);
     void setV2(Vector* v2);
     void setV3(Vector* v3);
+    void setX(double inc);
+    void setZ(double inc);
     Vector getVectorV1();
     Vector getVectorV2();
     Vector getVectorV3();

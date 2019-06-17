@@ -109,19 +109,18 @@ void Planche::render()
 {
     //le point d'origine est centré sur la planche donc la planche de dimension 10*10*0.5 a pour L=l=5 et h=0.5
 
-    double l = 5 ;
-    double L = 5 ;
+    double l = 5;
     double h = 0.5;
 
     Point centre = anim.getPos();
-    Point p1 = Point(5+centre.x,0+centre.y,5+centre.z);
-    Point p2 = Point(-5+centre.x,0+centre.y,5+centre.z);
-    Point p3 = Point(-5+centre.x,0+centre.y,-5+centre.z);
-    Point p4 = Point(5+centre.x,0+centre.y,-5+centre.z);
-    Point p5 = Point(5+centre.x,h+centre.y,5+centre.z);
-    Point p6 = Point(-5+centre.x,h+centre.y,5+centre.z);
-    Point p7 = Point(-5+centre.x,h+centre.y,-5+centre.z);
-    Point p8 = Point(5+centre.x,h+centre.y,-5+centre.z);
+    Point p1 = Point(l+centre.x,0+centre.y,l+centre.z);
+    Point p2 = Point(-l+centre.x,0+centre.y,l+centre.z);
+    Point p3 = Point(-l+centre.x,0+centre.y,-l+centre.z);
+    Point p4 = Point(l+centre.x,0+centre.y,-l+centre.z);
+    Point p5 = Point(l+centre.x,h+centre.y,l+centre.z);
+    Point p6 = Point(-l+centre.x,h+centre.y,l+centre.z);
+    Point p7 = Point(-l+centre.x,h+centre.y,-l+centre.z);
+    Point p8 = Point(l+centre.x,h+centre.y,-l+centre.z);
 
     Form::render();
 

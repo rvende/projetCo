@@ -42,7 +42,7 @@ public:
 
 
 // Compute the distance between two points
-double distance(Point p1, Point p2);
+double dist(Point p1, Point p2);
 
 // Overloaded standard operators
 std::ostream& operator<<(std::ostream& os, const Coordinates& coord);

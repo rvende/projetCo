@@ -44,6 +44,7 @@ Vector Vector::produitVectoriel(const Vector &v)
     res.x = y*v.z - z*v.y;
     res.y = z*v.x - x*v.z;
     res.z = x*v.y - y*v.x;
+    return res;
 }
 
 Vector Vector::integral(double delta_t)
@@ -66,7 +67,7 @@ void Vector::operator+=(const Vector &v)
 }
 
 
-double distance(Point p1, Point p2)
+double dist(Point p1, Point p2)
 {
     Vector vect(p1, p2);
 
