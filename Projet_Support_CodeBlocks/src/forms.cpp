@@ -177,6 +177,7 @@ void Planche::calculOrientation(Form* formlist[MAX_FORMS_NUMBER])
     {
         Point pos = formlist[i]->getPosition();
         double poids = formlist[i]->getPoids();
+
         i++;
     }
 }

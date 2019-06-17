@@ -34,6 +34,7 @@ public:
     // Compute the vector norm
     double norm();
     Vector integral(double delta_t);
+    Vector produitVectoriel(const Vector &v);
     // Overloaded standard operators
     void operator+=(const Vector &v);
 };
