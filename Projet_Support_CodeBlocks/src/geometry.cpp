@@ -20,6 +20,14 @@ Vector::Vector(Point p1, Point p2)
     z = p2.z - p1.z;
 }
 
+Vector::Vector(Point p1)
+{
+    x = p1.x;
+    y = 0;
+    z = p1.z;
+}
+
+
 
 double Vector::norm()
 {
@@ -51,7 +59,7 @@ void Vector::operator+=(const Vector &v)
 }
 
 
-double distance(Point p1, Point p2)
+double dist(Point p1, Point p2)
 {
     Vector vect(p1, p2);
 

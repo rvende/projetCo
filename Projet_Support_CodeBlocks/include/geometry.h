@@ -14,6 +14,7 @@ public:
 
 // Declaration in order to use it within Point methods
 class Vector;
+class Point;
 
 class Point : public Coordinates
 {
@@ -31,6 +32,9 @@ public:
     Vector(double xx=0, double yy=0, double zz=0) : Coordinates(xx, yy, zz) {}
     // Or with two points
     Vector(Point, Point);
+
+    Vector(Point p1);
+
     // Compute the vector norm
     double norm();
     Vector integral(double delta_t);
@@ -40,7 +44,7 @@ public:
 
 
 // Compute the distance between two points
-double distance(Point p1, Point p2);
+double dist(Point p1, Point p2);
 
 // Overloaded standard operators
 std::ostream& operator<<(std::ostream& os, const Coordinates& coord);

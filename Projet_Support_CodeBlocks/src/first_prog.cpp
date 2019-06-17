@@ -162,9 +162,9 @@ const void render(Rotule* r1,Planche* planche,Form* formlist[MAX_FORMS_NUMBER], 
 
     Point pos = cam_pos.getPos();
     Point referentiel = Point(0.0,0.0,0.0);
-    double xDes = distance(pos,referentiel) * cos(cam_pos.getTheta()*3.14159/180)* sin(cam_pos.getPhi()*3.14159/180)*cam_pos.getSpeed().x;
-    double yDes = distance(pos,referentiel) * sin(cam_pos.getTheta()*3.14159/180)*cam_pos.getSpeed().y;
-    double zDes = distance(pos,referentiel) * cos(cam_pos.getTheta()*3.14159/180)*cos(cam_pos.getPhi()*3.14159/180)*cam_pos.getSpeed().z;
+    double xDes = dist(pos,referentiel) * cos(cam_pos.getTheta()*3.14159/180)* sin(cam_pos.getPhi()*3.14159/180)*cam_pos.getSpeed().x;
+    double yDes = dist(pos,referentiel) * sin(cam_pos.getTheta()*3.14159/180)*cam_pos.getSpeed().y;
+    double zDes = dist(pos,referentiel) * cos(cam_pos.getTheta()*3.14159/180)*cos(cam_pos.getPhi()*3.14159/180)*cam_pos.getSpeed().z;
     //Point pos = cam_pos.getPos();
     gluLookAt(xDes,yDes,zDes,0.0,0.0,0.0,0.0,1.0,0.0);
     // Isometric view
@@ -218,8 +218,12 @@ void close(SDL_Window** window)
 /***************************************************************************/
 /* MAIN Function                                                           */
 /***************************************************************************/
-int main(int argc, char* args[])
+int main(int argc, char* argv[])
 {
+    Point p1;
+    Vector vectp1 (p1);
+
+
     // The window we'll be rendering to
     SDL_Window* gWindow = NULL;
 
@@ -339,6 +343,7 @@ int main(int argc, char* args[])
             SDL_GL_SwapWindow(gWindow);
         }
     }
+
 
     // Free resources and close SDL
     close(&gWindow);

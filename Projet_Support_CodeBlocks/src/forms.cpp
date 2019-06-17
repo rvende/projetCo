@@ -175,8 +175,17 @@ void Planche::calculOrientation(Form* formlist[MAX_FORMS_NUMBER])
     unsigned int i = 0;
     while (formlist[i]!= NULL)
     {
+        /*************
+        - Je dois changer le Poinr en vecteur Position dan la planche
+        - Inverer
+        - Changer le poids en scalaire en Vecteur
+        - Faire le Produit vectoriel pour avoir le theta 2 points
+//
+//        *****/
+
         Point pos = formlist[i]->getPosition();
         double poids = formlist[i]->getPoids();
+        Vector vect = Vector(pos);
         i++;
     }
 }
