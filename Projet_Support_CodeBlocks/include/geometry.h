@@ -31,6 +31,7 @@ public:
     Vector(double xx=0, double yy=0, double zz=0) : Coordinates(xx, yy, zz) {}
     // Or with two points
     Vector(Point, Point);
+    Vector(Point);
     // Compute the vector norm
     double norm();
     Vector integral(double delta_t);

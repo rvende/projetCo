@@ -86,13 +86,9 @@ void Cube_face::render()
     //glRotated()
     glBegin(GL_QUADS);
     {
-        glColor3f(1,1,0);
         glVertex3d(p1.x, p1.y, p1.z);
-        glColor3f(0,1,1);
         glVertex3d(p2.x, p2.y, p2.z);
-        glColor3f(1,0,1);
         glVertex3d(p3.x, p3.y, p3.z);
-        glColor3f(0,1,0);
         glVertex3d(p4.x, p4.y, p4.z);
     }
     glEnd();
@@ -106,6 +102,7 @@ Planche::Planche(Point centre){
 void Planche::update(double delta_t)
 {
 
+
 }
 
 void Planche::render()
@@ -115,7 +112,6 @@ void Planche::render()
     double l = 5 ;
     double L = 5 ;
     double h = 0.5;
-    Color col ;
 
     Point centre = anim.getPos();
     Point p1 = Point(5+centre.x,0+centre.y,5+centre.z);
@@ -183,22 +179,23 @@ void Planche::calculOrientation(Form* formlist[MAX_FORMS_NUMBER])
 }
 
 // CODE LIE AU CUBE
-Cube::Cube(Vector v1,Vector v2,Vector v3,Point centreGravite,float p)
+Cube::Cube(Vector v1,Vector v2,Vector v3,Point centreGravite,float p, Color cl)
 {
     V1 = v1;
     V2 = v2;
     V3 = v3;
     centreGrav = centreGravite;
     poids = p;
+    col = cl;
 
-    faces[0]  = new Cube_face(V2, V3, Point(centreGrav.x+0.5,centreGrav.y-0.5,centreGrav.z-0.5));
-    faces[1]  = new Cube_face(V2,V3, Point(centreGrav.x-0.5,centreGrav.y-0.5,centreGrav.z-0.5));
+    faces[0]  = new Cube_face(V2, V3, Point(centreGrav.x+0.5,centreGrav.y-0.5,centreGrav.z-0.5),1,1,cl);
+    faces[1]  = new Cube_face(V2,V3, Point(centreGrav.x-0.5,centreGrav.y-0.5,centreGrav.z-0.5),1,1,cl);
 
-    faces[2]  = new Cube_face(V1,V3, Point(centreGrav.x-0.5,centreGrav.y-0.5,centreGrav.z-0.5));
-    faces[3]  = new Cube_face(V1,V3, Point(centreGrav.x-0.5,centreGrav.y+0.5,centreGrav.z-0.5));
+    faces[2]  = new Cube_face(V1,V3, Point(centreGrav.x-0.5,centreGrav.y-0.5,centreGrav.z-0.5),1,1,cl);
+    faces[3]  = new Cube_face(V1,V3, Point(centreGrav.x-0.5,centreGrav.y+0.5,centreGrav.z-0.5),1,1,cl);
 
-    faces[4]  = new Cube_face(V1,V2, Point(centreGrav.x-0.5,centreGrav.y-0.5,centreGrav.z+0.5));
-    faces[5]  = new Cube_face(V1,V2, Point(centreGrav.x-0.5,centreGrav.y-0.5,centreGrav.z-0.5));
+    faces[4]  = new Cube_face(V1,V2, Point(centreGrav.x-0.5,centreGrav.y-0.5,centreGrav.z+0.5),1,1,cl);
+    faces[5]  = new Cube_face(V1,V2, Point(centreGrav.x-0.5,centreGrav.y-0.5,centreGrav.z-0.5),1,1,cl);
 }
 
 void Cube::setV1(Vector* v1){
@@ -211,6 +208,18 @@ void Cube::setV2(Vector* v2){
 
 void Cube::setV3(Vector* v3){
     V3 = *v3;
+}
+
+void Cube::setX(double inc){
+    Point p = anim.getPos();
+    p.x+=inc;
+    anim.setPos(p);
+}
+
+void Cube::setZ(double inc){
+    Point p = anim.getPos();
+    p.z+=inc;
+    anim.setPos(p);
 }
 
 Vector Cube::getVectorV1(){

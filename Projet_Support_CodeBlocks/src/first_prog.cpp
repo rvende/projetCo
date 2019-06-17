@@ -33,10 +33,10 @@ bool init(SDL_Window** window, SDL_GLContext* context);
 bool initGL();
 
 // Updating forms for animation
-void update(Planche* planche, Form* formlist[MAX_FORMS_NUMBER], double delta_t);
+void update(Planche* planche, Form* formlist[MAX_FORMS_NUMBER], Form* temp, double delta_t);
 
 // Renders scene to the screen
-const void render(Planche* planche, Form* formlist[MAX_FORMS_NUMBER], const Point &cam_pos);
+const void render(Rotule* rotule, Planche* planche, Form* formlist[MAX_FORMS_NUMBER], Form*temp, const Point &cam_pos);
 
 // Frees media and shuts down SDL
 void close(SDL_Window** window);
@@ -139,7 +139,7 @@ bool initGL()
     return success;
 }
 
-void update(Planche* planche, Form* formlist[MAX_FORMS_NUMBER], double delta_t)
+void update(Planche* planche, Form* formlist[MAX_FORMS_NUMBER], Form* temp, double delta_t)
 {
     // Update the list of forms
     unsigned short i = 0;
@@ -149,9 +149,12 @@ void update(Planche* planche, Form* formlist[MAX_FORMS_NUMBER], double delta_t)
         i++;
     }
     planche->update(delta_t);
+    if (temp != NULL){
+        temp->update(delta_t);
+    }
 }
 
-const void render(Rotule* r1,Planche* planche,Form* formlist[MAX_FORMS_NUMBER], Animation &cam_pos)
+const void render(Rotule* rotule,Planche* planche, Form* formlist[MAX_FORMS_NUMBER], Form* temp, Animation &cam_pos)
 {
     // Clear color buffer and Z-Buffer
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -187,7 +190,7 @@ const void render(Rotule* r1,Planche* planche,Form* formlist[MAX_FORMS_NUMBER], 
         glVertex3i(0, 0, 1);
     }
     glEnd();
-    r1->render();
+    rotule->render();
     glPopMatrix(); // Restore the camera viewing point for next object
 
     // Render the list of forms
@@ -200,6 +203,9 @@ const void render(Rotule* r1,Planche* planche,Form* formlist[MAX_FORMS_NUMBER], 
         formlist[i]->render();
         glPopMatrix(); // Restore the camera viewing point for next object
         i++;
+    }
+    if (temp != NULL){
+        temp->render();
     }
     glPopMatrix();
 }
@@ -258,10 +264,9 @@ int main(int argc, char* args[])
         planche = new Planche(Point(0.0,0.0,0.0));
 
         //Création des objets
-        Cube *cube_un = NULL;
-        cube_un = new Cube(Vector(1,0,0),Vector(0,1,0),Vector(0,0,1),Point(0.0,1,0.0),1);
-        forms_list[number_of_forms] = cube_un;
-        number_of_forms++;
+        Cube* temp = NULL;
+        temp = new Cube(Vector(1,0,0),Vector(0,1,0),Vector(0,0,1),Point(0.0,1,0.0),1, Color(1,0,0));
+
 
         /****    Creation de la Rotule *****/
 
@@ -271,8 +276,8 @@ int main(int argc, char* args[])
 
         Point pt2 = Point(x2,y2,z2);
 
-        Rotule *r1 = NULL;
-        r1 = new Rotule(pt2);
+        Rotule *rotule = NULL;
+        rotule = new Rotule(pt2);
 
         // Get first "current time"
         previous_time = SDL_GetTicks();
@@ -297,8 +302,8 @@ int main(int argc, char* args[])
 
                     switch(key_pressed)
                     {
-                    // Quit the program when 'q' or Escape keys are pressed
-                    case SDLK_q:
+                    // Quit the program when 'g' or Escape keys are pressed
+                    case SDLK_g:
                     case SDLK_ESCAPE:
                         quit = true;
                         break;
@@ -313,6 +318,20 @@ int main(int argc, char* args[])
                         break;
                     case SDLK_LEFT:
                         camera_position.setPhi(camera_position.getPhi()-10);
+                        break;
+                    case SDLK_z: //z++
+                        temp->setZ(.5);
+                        break;
+                    case SDLK_s: //z--
+                        temp->setZ(-0.5);
+                        break;
+                    case SDLK_q: //x--
+                        temp->setX(-0.5);
+                        break;
+                    case SDLK_d: //x++
+                        temp->setX(.5);
+                        break;
+                    case SDLK_SPACE: //pose objet
                         break;
                     default:
                         break;
@@ -329,11 +348,11 @@ int main(int argc, char* args[])
             if (elapsed_time > ANIM_DELAY)
             {
                 previous_time = current_time;
-                update(planche, forms_list, 1e-3 * elapsed_time); // International system units : seconds
+                update(planche, forms_list, temp, 1e-3 * elapsed_time); // International system units : seconds
             }
 
             // Render the scene
-            render(r1,planche, forms_list, camera_position);
+            render(rotule,planche, forms_list, temp,camera_position);
 
             // Update window screen
             SDL_GL_SwapWindow(gWindow);
