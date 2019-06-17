@@ -187,6 +187,7 @@ const void render(Rotule* r1,Planche* planche,Form* formlist[MAX_FORMS_NUMBER], 
         glVertex3i(0, 0, 1);
     }
     glEnd();
+    r1->render();
     glPopMatrix(); // Restore the camera viewing point for next object
 
     // Render the list of forms
@@ -272,8 +273,6 @@ int main(int argc, char* args[])
 
         Rotule *r1 = NULL;
         r1 = new Rotule(pt2);
-        forms_list[number_of_forms] = r1;
-        number_of_forms++;
 
         // Get first "current time"
         previous_time = SDL_GetTicks();
