@@ -4359,3 +4359,12 @@
 	<cmath>
 	"geometry.h"
 
+1560343282 source:d:\github\projetco\projet_support_codeblocks\src\animation.cpp
+	"animation.h"
+
+1560343280 d:\github\projetco\projet_support_codeblocks\include\animation.h
+	"geometry.h"
+
+1560876110 d:\github\projetco\projet_support_codeblocks\include\geometry.h
+	<iostream>
+
