@@ -215,14 +215,14 @@ void Cube::setV3(Vector* v3){
 
 void Cube::setX(double inc){
     Point p = anim.getPos();
-    cout << "x="<<p.x<<endl;
+   // cout << "x="<<p.x<<endl;
     p.x+=inc;
     anim.setPos(p);
 }
 
 void Cube::setZ(double inc){
     Point p = anim.getPos();
-    cout << "z="<<p.z<<endl;
+    //cout << "z="<<p.z<<endl;
     p.z+=inc;
     anim.setPos(p);
 }
@@ -255,6 +255,10 @@ float Cube::getPoids(){
     return poids;
 }
 
+Color Cube::getColor(){
+    return col;
+}
+
 void Cube::setColor(Color cl){
     col = cl;
     for(int i=0;i<6;i++){
@@ -282,7 +286,7 @@ void Cube::collision(Form* formlist[MAX_FORMS_NUMBER])
     {
         Point pos2 = formlist[i]->getPosition();
         if (((pos.x - pos2.x)< 1)&&((pos.x - pos2.x)> -1)&&((pos.z - pos2.z)< 1)&&((pos.z - pos2.z)> -1)){
-            cout <<"rouge"<<endl;
+           // cout <<"rouge"<<endl;
             rouge = true;
         }
         i++;

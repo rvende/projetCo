@@ -83,6 +83,7 @@ public:
           Color cl = Color());
     void update(double delta_t);
     void render();
+    Color getColor();
 };
 
 class Planche : public Form
@@ -123,6 +124,7 @@ public:
     // methodes du poids
     void setPoids(float* p);
     float getPoids();
+    Color getColor();
 
     //ABSTRACTION
     void update(double delta_t);

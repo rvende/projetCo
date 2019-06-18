@@ -260,10 +260,10 @@ int main(int argc, char* args[])
         {
             forms_list[i] = NULL;
         }
-        Cube* cube_un = NULL;
-        cube_un = new Cube(Vector(1,0,0),Vector(0,1,0),Vector(0,0,1),Point(0.0,1,0.0),1, Color(1,1,1));
-        forms_list[number_of_forms] = cube_un;
-        number_of_forms++;
+        //Cube* cube_un = NULL;
+        //cube_un = new Cube(Vector(1,0,0),Vector(0,1,0),Vector(0,0,1),Point(0.0,1,0.0),1, Color(1,1,1));
+        //forms_list[number_of_forms] = cube_un;
+        //number_of_forms++;
 
         /****    Création de la planche*****/
         Planche *planche = NULL;
@@ -271,7 +271,7 @@ int main(int argc, char* args[])
 
         /****    Création de l objet TEMPORAIRE *****/
         Cube* temp = NULL;
-        temp = new Cube(Vector(1,0,0),Vector(0,1,0),Vector(0,0,1),Point(3.0,1,3.0),1, Color(0,1,0));
+        temp = new Cube(Vector(1,0,0),Vector(0,1,0),Vector(0,0,1),Point(0,1,0),1, Color(0,1,0));
 
 
         /****    Creation de la Rotule *****/
@@ -285,6 +285,8 @@ int main(int argc, char* args[])
         Rotule *rotule = NULL;
         rotule = new Rotule(pt2);
 
+
+        /***** MAIN *****/
         // Get first "current time"
         previous_time = SDL_GetTicks();
         // While application is running
@@ -337,6 +339,16 @@ int main(int argc, char* args[])
                         temp->setX(.5);
                         break;
                     case SDLK_SPACE: //pose objet
+                        // SI PAS ROUGE = JE PEUX POSER
+                        if(temp->getColor().r != 1){
+                            // ajoute le cube temporaire à la liste de cube
+                            forms_list[number_of_forms]=temp;
+                            number_of_forms++;
+                            temp->setColor(WHITE);
+
+                            //créer un nouveau cube dans la liste temporaire
+                            temp = new Cube(Vector(1,0,0),Vector(0,1,0),Vector(0,0,1),Point(0,1,0),1, Color(0,1,0));
+                        }
                         break;
                     default:
                         break;
