@@ -139,7 +139,7 @@ bool initGL()
     return success;
 }
 
-void update(Planche* planche, Form* formlist[MAX_FORMS_NUMBER], Form* temp, double delta_t)
+void update(Planche* planche, Form* formlist[MAX_FORMS_NUMBER], Cube* temp, double delta_t)
 {
     // Update the list of forms
     unsigned short i = 0;
@@ -150,6 +150,7 @@ void update(Planche* planche, Form* formlist[MAX_FORMS_NUMBER], Form* temp, doub
     }
     planche->update(delta_t);
     if (temp != NULL){
+        temp->collision(formlist);
         temp->update(delta_t);
     }
 }
@@ -173,6 +174,7 @@ const void render(Rotule* rotule,Planche* planche, Form* formlist[MAX_FORMS_NUMB
     // Isometric view
     glRotated(-45, 0, 1, 0);
     //glRotated(30, 1, 0, -1);
+
 
     // X, Y and Z axis
     glPushMatrix(); // Preserve the camera viewing point for further forms
@@ -251,21 +253,25 @@ int main(int argc, char* args[])
         //Point camera_position(0, 0, 7.0);
         Animation camera_position= Animation(0.33,0,Vector(0,0,0),Vector(1,1,1),Point(0,0,25));
 
-        // The forms to render
+        /****    Création des objets    *****/
         Form* forms_list[MAX_FORMS_NUMBER];
         unsigned short number_of_forms = 0, i;
         for (i=0; i<MAX_FORMS_NUMBER; i++)
         {
             forms_list[i] = NULL;
         }
+        Cube* cube_un = NULL;
+        cube_un = new Cube(Vector(1,0,0),Vector(0,1,0),Vector(0,0,1),Point(0.0,1,0.0),1, Color(1,1,1));
+        forms_list[number_of_forms] = cube_un;
+        number_of_forms++;
 
-        // Création de la planche
+        /****    Création de la planche*****/
         Planche *planche = NULL;
         planche = new Planche(Point(0.0,0.0,0.0));
 
-        //Création des objets
+        /****    Création de l objet TEMPORAIRE *****/
         Cube* temp = NULL;
-        temp = new Cube(Vector(1,0,0),Vector(0,1,0),Vector(0,0,1),Point(0.0,1,0.0),1, Color(1,0,0));
+        temp = new Cube(Vector(1,0,0),Vector(0,1,0),Vector(0,0,1),Point(3.0,1,3.0),1, Color(0,1,0));
 
 
         /****    Creation de la Rotule *****/
@@ -303,7 +309,6 @@ int main(int argc, char* args[])
                     switch(key_pressed)
                     {
                     // Quit the program when 'g' or Escape keys are pressed
-                    case SDLK_g:
                     case SDLK_ESCAPE:
                         quit = true;
                         break;

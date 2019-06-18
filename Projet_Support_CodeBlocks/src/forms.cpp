@@ -32,6 +32,10 @@ double Form::getPoids()
     return poids;
 }
 
+void Form::setColor(Color cl){
+    col = cl;
+}
+
 
 Sphere::Sphere(double r, Color cl)
 {
@@ -183,18 +187,18 @@ Cube::Cube(Vector v1,Vector v2,Vector v3,Point centreGravite,float p, Color cl)
     V1 = v1;
     V2 = v2;
     V3 = v3;
-    centreGrav = centreGravite;
+    anim.setPos(centreGravite);
     poids = p;
     col = cl;
 
-    faces[0]  = new Cube_face(V2, V3, Point(centreGrav.x+0.5,centreGrav.y-0.5,centreGrav.z-0.5),1,1,cl);
-    faces[1]  = new Cube_face(V2,V3, Point(centreGrav.x-0.5,centreGrav.y-0.5,centreGrav.z-0.5),1,1,cl);
+    faces[0]  = new Cube_face(V2, V3, Point(0.5,-0.5,-0.5),1,1,cl);
+    faces[1]  = new Cube_face(V2,V3, Point(-0.5,-0.5,-0.5),1,1,cl);
 
-    faces[2]  = new Cube_face(V1,V3, Point(centreGrav.x-0.5,centreGrav.y-0.5,centreGrav.z-0.5),1,1,cl);
-    faces[3]  = new Cube_face(V1,V3, Point(centreGrav.x-0.5,centreGrav.y+0.5,centreGrav.z-0.5),1,1,cl);
+    faces[2]  = new Cube_face(V1,V3, Point(-0.5,-0.5,-0.5),1,1,cl);
+    faces[3]  = new Cube_face(V1,V3, Point(-0.5,+0.5,-0.5),1,1,cl);
 
-    faces[4]  = new Cube_face(V1,V2, Point(centreGrav.x-0.5,centreGrav.y-0.5,centreGrav.z+0.5),1,1,cl);
-    faces[5]  = new Cube_face(V1,V2, Point(centreGrav.x-0.5,centreGrav.y-0.5,centreGrav.z-0.5),1,1,cl);
+    faces[4]  = new Cube_face(V1,V2, Point(-0.5,-0.5,+0.5),1,1,cl);
+    faces[5]  = new Cube_face(V1,V2, Point(-0.5,-0.5,-0.5),1,1,cl);
 }
 
 void Cube::setV1(Vector* v1){
@@ -211,12 +215,14 @@ void Cube::setV3(Vector* v3){
 
 void Cube::setX(double inc){
     Point p = anim.getPos();
+    cout << "x="<<p.x<<endl;
     p.x+=inc;
     anim.setPos(p);
 }
 
 void Cube::setZ(double inc){
     Point p = anim.getPos();
+    cout << "z="<<p.z<<endl;
     p.z+=inc;
     anim.setPos(p);
 }
@@ -249,6 +255,13 @@ float Cube::getPoids(){
     return poids;
 }
 
+void Cube::setColor(Color cl){
+    col = cl;
+    for(int i=0;i<6;i++){
+        faces[i]->setColor(cl);
+    }
+}
+
 void Cube::update(double delta_t){
 }
 void Cube::render(){
@@ -257,6 +270,28 @@ void Cube::render(){
         glPushMatrix();
         faces[i]->render();
         glPopMatrix();
+    }
+}
+
+void Cube::collision(Form* formlist[MAX_FORMS_NUMBER])
+{
+    Point pos = anim.getPos();
+    bool rouge = false;
+    unsigned int i = 0;
+    while (formlist[i]!= NULL)
+    {
+        Point pos2 = formlist[i]->getPosition();
+        if (((pos.x - pos2.x)< 1)&&((pos.x - pos2.x)> -1)&&((pos.z - pos2.z)< 1)&&((pos.z - pos2.z)> -1)){
+            cout <<"rouge"<<endl;
+            rouge = true;
+        }
+        i++;
+    }
+    if (rouge){
+        setColor(Color(1,0,0));
+    }
+    else{
+        setColor(Color(0,1,0));
     }
 }
 

@@ -42,6 +42,7 @@ public:
     virtual void render();
     Point getPosition();
     double getPoids();
+    void setColor(Color cl);
 };
 // A face of a cube
 class Rotule : public Form
@@ -111,9 +112,11 @@ public:
     void setV3(Vector* v3);
     void setX(double inc);
     void setZ(double inc);
+    void collision(Form* formlist[MAX_FORMS_NUMBER]);
     Vector getVectorV1();
     Vector getVectorV2();
     Vector getVectorV3();
+    void setColor(Color cl);
     // methodes du centre de gravite
     void setCentreGrav(Point* point);
     Point getCentreGrav();
