@@ -23,7 +23,7 @@ Vector::Vector(Point p1, Point p2)
 Vector::Vector(Point p)
 {
     x = p.x;
-    y = p.y;
+    y = 0;
     z = p.z;
 }
 

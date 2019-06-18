@@ -3634,12 +3634,13 @@
 1560786227 c:\users\soreyawari\desktop\projet_pops\projet coopératif\projetco\projet_support_codeblocks\include\geometry.h
 	<iostream>
 
-1560868259 source:c:\users\soreyawari\desktop\projet_pops\projet coopératif\projetco\projet_support_codeblocks\src\first_prog.cpp
+1560876293 source:c:\users\soreyawari\desktop\projet_pops\projet coopératif\projetco\projet_support_codeblocks\src\first_prog.cpp
 	<iostream>
 	<cmath>
 	<SDL2/SDL.h>
 	<SDL2/SDL_opengl.h>
 	<GL/GLU.h>
+	<sstream>
 	"geometry.h"
 	"forms.h"
 
@@ -3978,17 +3979,17 @@
 	<stdint.h>
 	<inttypes.h>
 
-1560790369 c:\users\soreyawari\desktop\projet_pops\projet coopératif\projetco\projet_support_codeblocks\include\forms.h
+1560876017 c:\users\soreyawari\desktop\projet_pops\projet coopératif\projetco\projet_support_codeblocks\include\forms.h
 	"geometry.h"
 	"animation.h"
 
-1560868523 source:c:\users\soreyawari\desktop\projet_pops\projet coopératif\projetco\projet_support_codeblocks\src\forms.cpp
+1560876017 source:c:\users\soreyawari\desktop\projet_pops\projet coopératif\projetco\projet_support_codeblocks\src\forms.cpp
 	<cmath>
 	<SDL2/SDL_opengl.h>
 	<GL/GLU.h>
 	"forms.h"
 
-1560786261 source:c:\users\soreyawari\desktop\projet_pops\projet coopératif\projetco\projet_support_codeblocks\src\geometry.cpp
+1560869803 source:c:\users\soreyawari\desktop\projet_pops\projet coopératif\projetco\projet_support_codeblocks\src\geometry.cpp
 	<cmath>
 	"geometry.h"
 

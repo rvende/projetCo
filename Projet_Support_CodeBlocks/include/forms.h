@@ -6,7 +6,6 @@
 
 
 #define MAX_FORMS_NUMBER 10
-#define GRAVITE 9.8
 
 class Color
 {
@@ -104,7 +103,6 @@ private:
     Vector V3;
     Point centreGrav;
     Cube_face* faces[6];
-    float poids;
 public:
     // methodes des vecteurs
     Cube(Vector v1,Vector v2,Vector v3,Point centreGravite,float p,Color cl);

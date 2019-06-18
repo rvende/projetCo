@@ -264,6 +264,7 @@ void update(Planche* planche, Form* formlist[MAX_FORMS_NUMBER], Cube* temp, doub
         formlist[i]->update(delta_t);
         i++;
     }
+    planche->calculOrientation(formlist);
     planche->update(delta_t);
     if (temp != NULL){
         temp->collision(formlist);
@@ -379,6 +380,7 @@ int main(int argc, char* args[])
         {
             forms_list[i] = NULL;
         }
+
         //Cube* cube_un = NULL;
         //cube_un = new Cube(Vector(1,0,0),Vector(0,1,0),Vector(0,0,1),Point(0.0,1,0.0),1, Color(1,1,1));
         //forms_list[number_of_forms] = cube_un;

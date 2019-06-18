@@ -20,6 +20,10 @@ void Form::render()
     Point org = anim.getPos();
     glTranslated(org.x, org.y, org.z);
     glColor3f(col.r, col.g, col.b);
+    double phi = anim.getPhi();
+    double theta = anim.getTheta();
+    glRotated(phi,1,0,0);
+    glRotated(theta,0,0,1);
 }
 
 Point Form::getPosition()
@@ -105,8 +109,17 @@ Planche::Planche(Point centre){
 
 void Planche::update(double delta_t)
 {
-
-
+    double phi = anim.getPhi();//angle autour de x
+    double theta = anim.getTheta();
+    Vector vitesse = anim.getSpeed();
+    Vector acceleration = anim.getAccel();
+    vitesse.x += acceleration.x*delta_t;
+    vitesse.z += acceleration.z*delta_t;
+    anim.setSpeed(vitesse);
+    phi += (vitesse.x * delta_t)*180/3.14;
+    theta += (vitesse.z * delta_t)*180/3.14;
+    anim.setPhi(phi);
+    anim.setTheta(theta);
 }
 
 void Planche::render()
@@ -171,14 +184,24 @@ void Planche::render()
 
 void Planche::calculOrientation(Form* formlist[MAX_FORMS_NUMBER])
 {
+    cout << "calcul" << endl;
+    Vector total = Vector(0,0,0);
     unsigned int i = 0;
     while (formlist[i]!= NULL)
     {
         Point pos = formlist[i]->getPosition();
-        double poids = formlist[i]->getPoids();
-
+        Vector vect = Vector(pos);
+        cout << vect.x << " " << vect.y << " " << vect.z <<endl;
+        double masse = formlist[i]->getPoids();
+        Vector vectPoids = Vector(0,-masse,0);
+        cout << vectPoids.x << " " << vectPoids.y << " " << vectPoids.z <<endl;
+        Vector produit = vect.produitVectoriel(vectPoids);
+        total+=produit;
         i++;
     }
+    //total.x/=momentx
+    anim.setAccel(total);
+
 }
 
 // CODE LIE AU CUBE
@@ -267,6 +290,7 @@ void Cube::setColor(Color cl){
 }
 
 void Cube::update(double delta_t){
+
 }
 void Cube::render(){
     Form::render();
