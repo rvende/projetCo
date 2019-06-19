@@ -38,6 +38,8 @@ public:
     Vector produitVectoriel(const Vector &v);
     // Overloaded standard operators
     void operator+=(const Vector &v);
+    Vector operator*(const Vector v);
+
 };
 
 

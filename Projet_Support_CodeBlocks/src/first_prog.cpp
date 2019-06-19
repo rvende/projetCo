@@ -281,6 +281,7 @@ const void render(Rotule* rotule,Planche* planche, Form* formlist[MAX_FORMS_NUMB
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
     gluOrtho2D(10, SCREEN_WIDTH, SCREEN_HEIGHT, 0 ); // Taille de la fenêtre, 800x600 pixels
+    //Color(0,255,0);
     afficherScore(SCORE);
     glLoadIdentity();
 
@@ -353,7 +354,6 @@ int main(int argc, char* args[])
 
     // OpenGL context
     SDL_GLContext gContext;
-
 
     // Start up SDL and create window
     if( !init(&gWindow, &gContext))

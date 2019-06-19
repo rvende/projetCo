@@ -66,6 +66,15 @@ void Vector::operator+=(const Vector &v)
     z += v.z;
 }
 
+Vector Vector::operator*(const Vector v)
+{
+    Vector res;
+    res.x = x*v.x;
+    res.y = y*v.y;
+    res.z = z*v.z;
+    return res;
+}
+
 
 double dist(Point p1, Point p2)
 {
