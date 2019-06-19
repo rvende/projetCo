@@ -60,6 +60,11 @@ Planche::Planche(Point centre){
     V1 = Vector(1,0,0);
     V2 = Vector(0,0,1);
     col = Color(0.941, 0.529, 0.569);
+
+     l = 5;
+     h = 0.5;
+     masse = 9;
+     momentxyz = Vector((masse/12)*(l*l+h*h), (masse/12)*(l*l+h*h), (masse/12)*(l*l+h*h));
 }
 
 OrientVectors Planche::update(double delta_t)
@@ -95,8 +100,6 @@ Vector Planche::vecteurY(){
 
 void Planche::render()
 {
-    double l = 10;
-    double h = 0.5;
     Vector norme = V2^V1;
     Form::render();
     Point p0 = Point(0,0,0);
@@ -108,6 +111,7 @@ void Planche::render()
     Point p6 = p2.translate(-h*norme);
     Point p7 = p3.translate(-h*norme);
     Point p8 = p4.translate(-h*norme);
+
     Form::render();
 
     glBegin(GL_QUADS);
@@ -168,6 +172,10 @@ void Planche::calculOrientation(Form* formlist[MAX_FORMS_NUMBER])
         total+=produit;
         i++;
     }
+    //total.x/=momentx
+
+    //anim.setAccel(total);
+
     //total.x/=momentx;
     anim.setAccel(total);
 
@@ -217,6 +225,7 @@ void Cube::setZ(double inc){
         posPlanche.z-=inc;
     }
 }
+
 
 
 float Cube::getPoids(){

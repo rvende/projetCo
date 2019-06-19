@@ -5,7 +5,7 @@
 #include "animation.h"
 
 
-#define MAX_FORMS_NUMBER 10
+#define MAX_FORMS_NUMBER 50
 
 class Color
 {
@@ -63,9 +63,13 @@ public:
     OrientVectors update(double delta_t);
 };
 
-
 class Planche : public Form
 {
+private:
+    Vector momentxyz;
+        double l;
+        double h;
+        double masse;
 public:
     Planche(Point org = Point());
     Vector getV1();

@@ -155,11 +155,13 @@ void afficherScore(int score)
     ss << score;
     out_string = ss.str();
 	string textScore =  "Score : " +out_string;
-
+    glColor3f(0,1,20);
 	glRasterPos3f(0,10,3);
 
-	for( int i = 0; i < textScore.size(); ++i )
-	glBitmap(6, 12, 0.0, 0.0, 7, 0.0, GL_FONT_DATA[textScore[i]-31] );
+	for( int i = 0; i < textScore.size(); ++i ){
+        //glColor3f(20.0f, 1.0f, 0.0f);
+        glBitmap(6, 12, 0.0, 0.0, 7, 0.0, GL_FONT_DATA[textScore[i]-31] );
+	}
 }
 bool init(SDL_Window** window, SDL_GLContext* context)
 {
@@ -289,6 +291,7 @@ const void render(Rotule* rotule,Planche* planche, Form* formlist[MAX_FORMS_NUMB
     glLoadIdentity();
 
     Point pos = cam_pos.getPos();
+    cout << "pos z : "<<pos.z << endl;
     Point referentiel = Point(0.0,0.0,0.0);
     double xDes = dist(pos,referentiel) * cos(cam_pos.getTheta()*3.14159/180)* sin(cam_pos.getPhi()*3.14159/180)*cam_pos.getSpeed().x;
     double yDes = dist(pos,referentiel) * sin(cam_pos.getTheta()*3.14159/180)*cam_pos.getSpeed().y;
@@ -479,6 +482,12 @@ int main(int argc, char* args[])
                         break;
                     case SDLK_q: //x--
                         temp->setX(-0.5);
+                        break;
+                    case SDLK_m: //x++
+                        camera_position.setPos(Point(camera_position.getPos().x,camera_position.getPos().y,camera_position.getPos().z+5));
+                        break;
+                    case SDLK_p: //x++
+                        camera_position.setPos(Point(camera_position.getPos().x,camera_position.getPos().y,camera_position.getPos().z-5));
                         break;
                     case SDLK_d: //x++
                         temp->setX(.5);
