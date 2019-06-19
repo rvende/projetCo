@@ -291,7 +291,7 @@ const void render(Rotule* rotule,Planche* planche, Form* formlist[MAX_FORMS_NUMB
     glLoadIdentity();
 
     Point pos = cam_pos.getPos();
-    cout << "pos z : "<<pos.z << endl;
+    //cout << "pos z : "<<pos.z << endl;
     Point referentiel = Point(0.0,0.0,0.0);
     double xDes = dist(pos,referentiel) * cos(cam_pos.getTheta()*3.14159/180)* sin(cam_pos.getPhi()*3.14159/180)*cam_pos.getSpeed().x;
     double yDes = dist(pos,referentiel) * sin(cam_pos.getTheta()*3.14159/180)*cam_pos.getSpeed().y;
@@ -406,10 +406,10 @@ int main(int argc, char* args[])
         forms_list[number_of_forms] = cube_trois;
         number_of_forms++;
 
-        Cube* cube_quatre = NULL;
-        cube_quatre = new Cube(Vector(1,0,0),Vector(0,0,1),Point(4.5,0,-4.5),1, Color(1,1,1));
-        forms_list[number_of_forms] = cube_quatre;
-        number_of_forms++;
+//        Cube* cube_quatre = NULL;
+//        cube_quatre = new Cube(Vector(1,0,0),Vector(0,0,1),Point(4.5,0,-4.5),1, Color(1,1,1));
+//        forms_list[number_of_forms] = cube_quatre;
+//        number_of_forms++;
 
 
         //Cube* cube_un = NULL;

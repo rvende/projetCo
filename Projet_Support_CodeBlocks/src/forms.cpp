@@ -61,7 +61,7 @@ Planche::Planche(Point centre){
     V2 = Vector(0,0,1);
     col = Color(0.941, 0.529, 0.569);
 
-     l = 5;
+     l = 10;
      h = 0.5;
      masse = 9;
      momentxyz = Vector((masse/12)*(l*l+h*h), (masse/12)*(l*l+h*h), (masse/12)*(l*l+h*h));
@@ -164,10 +164,10 @@ void Planche::calculOrientation(Form* formlist[MAX_FORMS_NUMBER])
     {
         Point pos = formlist[i]->getPosition();
         Vector vect = Vector(pos);
-        cout << vect.x << " " << vect.y << " " << vect.z <<endl;
+        //cout << vect.x << " " << vect.y << " " << vect.z <<endl;
         double masse = formlist[i]->getPoids();
         Vector vectPoids = Vector(0,-0.001,0);
-        cout << vectPoids.x << " " << vectPoids.y << " " << vectPoids.z <<endl;
+        //cout << vectPoids.x << " " << vectPoids.y << " " << vectPoids.z <<endl;
         Vector produit = vect.produitVectoriel(vectPoids);
         total+=produit;
         i++;
