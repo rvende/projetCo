@@ -129,6 +129,7 @@ public:
     void setPoids(float* p);
     float getPoids();
     Color getColor();
+    bool estSurPlanche();
 
     //ABSTRACTION
     void update(double delta_t);

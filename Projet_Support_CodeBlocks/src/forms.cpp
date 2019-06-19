@@ -26,6 +26,19 @@ void Form::render()
     glRotated(theta,0,0,1);
 }
 
+bool Cube::estSurPlanche(){
+    //Si l'objet ne sort pas de la planche
+    Point p = anim.getPos();
+    if( (p.x < 5) && (p.x > -5) && (p.z < 5) && (p.z > -5)){
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
 Point Form::getPosition()
 {
     return anim.getPos();
@@ -191,7 +204,7 @@ void Planche::render()
 
 void Planche::calculOrientation(Form* formlist[MAX_FORMS_NUMBER])
 {
-    cout << "calcul" << endl;
+    //cout << "calcul" << endl;
     Vector total = Vector(0,0,0);
     unsigned int i = 0;
     while (formlist[i]!= NULL)
@@ -209,6 +222,9 @@ void Planche::calculOrientation(Form* formlist[MAX_FORMS_NUMBER])
     //total.x/=momentx
 
     //anim.setAccel(total);
+
+    //total.x/=momentx;
+    anim.setAccel(total);
 
 }
 
@@ -245,17 +261,23 @@ void Cube::setV3(Vector* v3){
 }
 
 void Cube::setX(double inc){
-    Point p = anim.getPos();
-   // cout << "x="<<p.x<<endl;
-    p.x+=inc;
-    anim.setPos(p);
+    Point pOld = anim.getPos();
+    Point pNew = pOld;
+    pNew.x+=inc;
+    anim.setPos(pNew);
+    if(!estSurPlanche()) {
+        anim.setPos(pOld);
+    }
 }
 
 void Cube::setZ(double inc){
-    Point p = anim.getPos();
-    //cout << "z="<<p.z<<endl;
-    p.z+=inc;
-    anim.setPos(p);
+    Point pOld = anim.getPos();
+    Point pNew = pOld;
+    pNew.z+=inc;
+    anim.setPos(pNew);
+    if(!estSurPlanche()) {
+        anim.setPos(pOld);
+    }
 }
 
 Vector Cube::getVectorV1(){
