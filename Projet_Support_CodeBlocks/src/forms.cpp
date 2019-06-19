@@ -26,6 +26,19 @@ void Form::render()
     glRotated(theta,0,0,1);
 }
 
+bool Cube::estSurPlanche(){
+    //Si l'objet ne sort pas de la planche
+    Point p = anim.getPos();
+    if( (p.x < 5) && (p.x > -5) && (p.z < 5) && (p.z > -5)){
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
 Point Form::getPosition()
 {
     return anim.getPos();
@@ -105,6 +118,11 @@ void Cube_face::render()
 Planche::Planche(Point centre){
     anim.setPos(centre);
     col = Color(0.941, 0.529, 0.569);
+
+     l = 5;
+     h = 0.5;
+     masse = 9;
+     momentxyz = Vector((masse/12)*(l*l+h*h), (masse/12)*(l*l+h*h), (masse/12)*(l*l+h*h));
 }
 
 void Planche::update(double delta_t)
@@ -126,8 +144,10 @@ void Planche::render()
 {
     //le point d'origine est centré sur la planche donc la planche de dimension 10*10*0.5 a pour L=l=5 et h=0.5
 
-    double l = 5;
-    double h = 0.5;
+
+
+
+
 
     Point centre = anim.getPos();
     Point p1 = Point(l+centre.x,0+centre.y,l+centre.z);
@@ -184,7 +204,7 @@ void Planche::render()
 
 void Planche::calculOrientation(Form* formlist[MAX_FORMS_NUMBER])
 {
-    cout << "calcul" << endl;
+    //cout << "calcul" << endl;
     Vector total = Vector(0,0,0);
     unsigned int i = 0;
     while (formlist[i]!= NULL)
@@ -200,7 +220,11 @@ void Planche::calculOrientation(Form* formlist[MAX_FORMS_NUMBER])
         i++;
     }
     //total.x/=momentx
+
     //anim.setAccel(total);
+
+    //total.x/=momentx;
+    anim.setAccel(total);
 
 }
 
@@ -211,7 +235,7 @@ Cube::Cube(Vector v1,Vector v2,Vector v3,Point centreGravite,float p, Color cl)
     V2 = v2;
     V3 = v3;
     anim.setPos(centreGravite);
-    poids = p;
+    poids = p*9.8;
     col = cl;
 
     faces[0]  = new Cube_face(V2, V3, Point(0.5,-0.5,-0.5),1,1,cl);
@@ -237,17 +261,23 @@ void Cube::setV3(Vector* v3){
 }
 
 void Cube::setX(double inc){
-    Point p = anim.getPos();
-   // cout << "x="<<p.x<<endl;
-    p.x+=inc;
-    anim.setPos(p);
+    Point pOld = anim.getPos();
+    Point pNew = pOld;
+    pNew.x+=inc;
+    anim.setPos(pNew);
+    if(!estSurPlanche()) {
+        anim.setPos(pOld);
+    }
 }
 
 void Cube::setZ(double inc){
-    Point p = anim.getPos();
-    //cout << "z="<<p.z<<endl;
-    p.z+=inc;
-    anim.setPos(p);
+    Point pOld = anim.getPos();
+    Point pNew = pOld;
+    pNew.z+=inc;
+    anim.setPos(pNew);
+    if(!estSurPlanche()) {
+        anim.setPos(pOld);
+    }
 }
 
 Vector Cube::getVectorV1(){
@@ -273,6 +303,7 @@ Point Cube::getCentreGrav(){
 void Cube::setPoids(float* p){
     poids = *p;
 }
+
 
 float Cube::getPoids(){
     return poids;

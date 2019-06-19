@@ -422,6 +422,7 @@ int main(int argc, char* args[])
                 int x = 0, y = 0;
                 SDL_Keycode key_pressed = event.key.keysym.sym;
 
+
                 switch(event.type)
                 {
                 // User requests quit
@@ -472,7 +473,6 @@ int main(int argc, char* args[])
                         // SI PAS ROUGE = JE PEUX POSER
                         if(temp->getColor().r != 1){
                             // ajoute le cube temporaire à la liste de cube
-
                             forms_list[number_of_forms]=temp;
                             number_of_forms++;
                             temp->setColor(WHITE);
@@ -489,6 +489,7 @@ int main(int argc, char* args[])
                 default:
                     break;
                 }
+
             }
 
             // Update the scene
