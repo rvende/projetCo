@@ -76,6 +76,7 @@ class Cube_face : public Form
 private:
     Vector vdir1, vdir2;
     double length, width;
+    Vector moment_inertie_c = Vector((poids/12)*(length*length+width*width), (poids/12)*(length*length+width*width), (poids/12)*(length*length+width*width));
 public:
     Cube_face(Vector v1 = Vector(1,0,0), Vector v2 = Vector(0,0,1),
           Point org = Point(), double l = 1.0, double w = 1.0,
@@ -87,6 +88,11 @@ public:
 
 class Planche : public Form
 {
+private:
+    Vector momentxyz;
+        double l;
+        double h;
+        double masse;
 public:
     Planche(Point org = Point());
     void update(double delta_t);
