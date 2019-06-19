@@ -117,7 +117,7 @@ const GLubyte GL_FONT_DATA[] [12]= {
 {0xc0, 0x20, 0x20, 0x20, 0x20, 0x18, 0x20, 0x20, 0x20, 0x20, 0xc0, 0x00},	//  }
 {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x98, 0x64, 0x00, 0x00, 0x00, 0x00}};
 
-
+int SCORE = 0;
 // Screen dimension constants
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -281,7 +281,7 @@ const void render(Rotule* rotule,Planche* planche, Form* formlist[MAX_FORMS_NUMB
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
     gluOrtho2D(10, SCREEN_WIDTH, SCREEN_HEIGHT, 0 ); // Taille de la fenêtre, 800x600 pixels
-    afficherScore(10);
+    afficherScore(SCORE);
     glLoadIdentity();
 
     Point pos = cam_pos.getPos();
@@ -463,9 +463,11 @@ int main(int argc, char* args[])
                         // SI PAS ROUGE = JE PEUX POSER
                         if(temp->getColor().r != 1){
                             // ajoute le cube temporaire à la liste de cube
+
                             forms_list[number_of_forms]=temp;
                             number_of_forms++;
                             temp->setColor(WHITE);
+                            SCORE++; //incrementation du score
 
                             //créer un nouveau cube dans la liste temporaire
                             temp = new Cube(Vector(1,0,0),Vector(0,1,0),Vector(0,0,1),Point(0,1,0),1, Color(0,1,0));
