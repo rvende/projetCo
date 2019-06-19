@@ -14,6 +14,12 @@ public:
     Color(float rr = 1.0f, float gg = 1.0f, float bb = 1.0f) {r=rr; g=gg; b=bb;}
 };
 
+class OrientVectors{
+public:
+    Vector V1,V2;
+    OrientVectors(Vector v1 = Vector(1,0,0), Vector v2 = Vector(0,0,1)){V1 = v1; V2 = v2;}
+};
+
 // Constant Colors
 const Color RED(1.0f, 0.0f, 0.0f);
 const Color BLUE(0.0f, 0.0f, 1.0f);
@@ -29,6 +35,7 @@ protected:
     Color col;
     Animation anim;
     double poids;
+    Vector V1,V2;
 public:
     Animation& getAnim() {return anim;}
     void setAnim(Animation ani) {anim = ani;}
@@ -36,12 +43,14 @@ public:
     // It has to be done in each inherited class, otherwise all forms will have the same movements !
     // Virtual method for dynamic function call
     // Pure virtual to ensure all objects have their physics implemented
-    virtual void update(double delta_t) = 0;
+    virtual OrientVectors update(double delta_t) = 0;
     // Virtual method : Form is a generic type, only setting color and reference position
     virtual void render();
     Point getPosition();
     double getPoids();
+    virtual Point getPosPlanche();
     void setColor(Color cl);
+    virtual void setOrient(Vector v1, Vector v2);
 };
 // A face of a cube
 class Rotule : public Form
@@ -51,82 +60,47 @@ private:
 public:
     Rotule(Point centre);
     void render();
-    void update(double delta_t);
+    OrientVectors update(double delta_t);
 };
 
-// A particular Form
-class Sphere : public Form
-{
-private:
-    // The sphere center is aligned with the coordinate system origin
-    // => no center required here, information is stored in the anim object
-    double radius;
-public:
-    Sphere(double r = 1.0, Color cl = Color());
-    const double getRadius() {return radius;}
-    void setRadius(double r) {radius = r;}
-    void update(double delta_t);
-    void render();
-};
-
-
-// A face of a cube
-class Cube_face : public Form
-{
-private:
-    Vector vdir1, vdir2;
-    double length, width;
-public:
-    Cube_face(Vector v1 = Vector(1,0,0), Vector v2 = Vector(0,0,1),
-          Point org = Point(), double l = 1.0, double w = 1.0,
-          Color cl = Color());
-    void update(double delta_t);
-    void render();
-    Color getColor();
-};
 
 class Planche : public Form
 {
 public:
     Planche(Point org = Point());
-    void update(double delta_t);
+    Vector getV1();
+    Vector getV2();
+    OrientVectors update(double delta_t);
     void render();
     void calculOrientation(Form* formlist[MAX_FORMS_NUMBER]);
+    void setOrient(Vector v1, Vector v2);
+    Vector vecteurX();
+    Vector vecteurY();
+    Point getPosPlanche();
 };
 
 // Cube
 class Cube : public Form
 {
 private:
-    Vector V1;
-    Vector V2;
-    Vector V3;
-    Point centreGrav;
-    Cube_face* faces[6];
+    Point posPlanche;
 public:
     // methodes des vecteurs
-    Cube(Vector v1,Vector v2,Vector v3,Point centreGravite,float p,Color cl);
-    void setV1(Vector* v1);
-    void setV2(Vector* v2);
-    void setV3(Vector* v3);
+    Cube(Vector v1,Vector v2,float p,Color cl);
+    Cube(Vector v1, Vector v2, Point pos, float p,Color c1);
+    void setOrient(Vector v1,Vector v2);
     void setX(double inc);
     void setZ(double inc);
     void collision(Form* formlist[MAX_FORMS_NUMBER]);
-    Vector getVectorV1();
-    Vector getVectorV2();
-    Vector getVectorV3();
     void setColor(Color cl);
-    // methodes du centre de gravite
-    void setCentreGrav(Point* point);
-    Point getCentreGrav();
     // methodes du poids
     void setPoids(float* p);
     float getPoids();
     Color getColor();
     bool estSurPlanche();
-
+    Point getPosPlanche();
     //ABSTRACTION
-    void update(double delta_t);
+    OrientVectors update(double delta_t);
     void render();
 
 
