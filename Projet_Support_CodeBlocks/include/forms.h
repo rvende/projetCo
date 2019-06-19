@@ -5,7 +5,7 @@
 #include "animation.h"
 
 
-#define MAX_FORMS_NUMBER 10
+#define MAX_FORMS_NUMBER 50
 
 class Color
 {
