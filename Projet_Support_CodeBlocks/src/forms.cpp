@@ -78,6 +78,32 @@ OrientVectors Planche::update(double delta_t)
     anim.setSpeed(vitesse);
     phi += (vitesse.x * delta_t);
     theta += (vitesse.z * delta_t);
+
+    const double angleMax = 20.0;
+
+    if((phi*180/3.14159)>=angleMax){
+            phi = angleMax*3.14159/180;
+            anim.setAccel(Vector(0,acceleration.y,acceleration.z));
+            anim.setSpeed(Vector(0,vitesse.y,vitesse.z));
+    }
+
+    if(((phi*180/3.14159)<=-angleMax) ){
+            phi = -angleMax*3.14159/180;
+            anim.setAccel(Vector(0,acceleration.y,acceleration.z));
+            anim.setSpeed(Vector(0,vitesse.y,vitesse.z));
+    }
+
+    if((theta*180/3.14159)>=angleMax){
+        theta = angleMax*3.14159/180;
+        anim.setAccel(Vector(acceleration.x,acceleration.y,0));
+        anim.setSpeed(Vector(vitesse.x,vitesse.y,0));
+    }
+
+    if(((theta*180/3.14159)<=-angleMax) ){
+            theta = -angleMax*3.14159/180;
+            anim.setAccel(Vector(acceleration.x,acceleration.y,0));
+        anim.setSpeed(Vector(vitesse.x,vitesse.y,0));
+    }
     anim.setPhi(phi);
     anim.setTheta(theta);
     return OrientVectors(vecteurX(), vecteurY());
@@ -166,7 +192,7 @@ void Planche::calculOrientation(Form* formlist[MAX_FORMS_NUMBER])
         Vector vect = Vector(pos);
         //cout << vect.x << " " << vect.y << " " << vect.z <<endl;
         double masse = formlist[i]->getPoids();
-        Vector vectPoids = Vector(0,-0.001,0);
+        Vector vectPoids = Vector(0,-0.101,0);
         //cout << vectPoids.x << " " << vectPoids.y << " " << vectPoids.z <<endl;
         Vector produit = vect.produitVectoriel(vectPoids);
         total+=produit;
