@@ -155,11 +155,13 @@ void afficherScore(int score)
     ss << score;
     out_string = ss.str();
 	string textScore =  "Score : " +out_string;
-
+    glColor3f(0,1,20);
 	glRasterPos3f(0,10,3);
 
-	for( int i = 0; i < textScore.size(); ++i )
-	glBitmap(6, 12, 0.0, 0.0, 7, 0.0, GL_FONT_DATA[textScore[i]-31] );
+	for( int i = 0; i < textScore.size(); ++i ){
+        //glColor3f(20.0f, 1.0f, 0.0f);
+        glBitmap(6, 12, 0.0, 0.0, 7, 0.0, GL_FONT_DATA[textScore[i]-31] );
+	}
 }
 bool init(SDL_Window** window, SDL_GLContext* context)
 {
@@ -259,16 +261,19 @@ void update(Planche* planche, Form* formlist[MAX_FORMS_NUMBER], Cube* temp, doub
 {
     // Update the list of forms
     unsigned short i = 0;
-    while(formlist[i] != NULL)
-    {
-        formlist[i]->update(delta_t);
-        i++;
-    }
     planche->calculOrientation(formlist);
-    planche->update(delta_t);
+    OrientVectors orient = planche->update(delta_t);
     if (temp != NULL){
         temp->collision(formlist);
+        temp->setOrient(orient.V1,orient.V2);
         temp->update(delta_t);
+    }
+
+    while(formlist[i] != NULL)
+    {
+        formlist[i]->setOrient(orient.V1,orient.V2);
+        formlist[i]->update(delta_t);
+        i++;
     }
 }
 
@@ -286,6 +291,7 @@ const void render(Rotule* rotule,Planche* planche, Form* formlist[MAX_FORMS_NUMB
     glLoadIdentity();
 
     Point pos = cam_pos.getPos();
+    //cout << "pos z : "<<pos.z << endl;
     Point referentiel = Point(0.0,0.0,0.0);
     double xDes = dist(pos,referentiel) * cos(cam_pos.getTheta()*3.14159/180)* sin(cam_pos.getPhi()*3.14159/180)*cam_pos.getSpeed().x;
     double yDes = dist(pos,referentiel) * sin(cam_pos.getTheta()*3.14159/180)*cam_pos.getSpeed().y;
@@ -313,12 +319,15 @@ const void render(Rotule* rotule,Planche* planche, Form* formlist[MAX_FORMS_NUMB
         glVertex3i(0, 0, 1);
     }
     glEnd();
+    glPopMatrix();
+    glPushMatrix();
     rotule->render();
     glPopMatrix(); // Restore the camera viewing point for next object
 
     // Render the list of forms
     glPushMatrix();
     planche->render();
+    glPopMatrix();
     unsigned int i = 0;
     while (formlist[i]!= NULL)
     {
@@ -328,9 +337,10 @@ const void render(Rotule* rotule,Planche* planche, Form* formlist[MAX_FORMS_NUMB
         i++;
     }
     if (temp != NULL){
+        glPushMatrix();
         temp->render();
+        glPopMatrix();
     }
-    glPopMatrix();
 }
 
 void close(SDL_Window** window)
@@ -380,6 +390,27 @@ int main(int argc, char* args[])
         {
             forms_list[i] = NULL;
         }
+        //ESSAI
+        Cube* cube_un = NULL;
+        cube_un = new Cube(Vector(1,0,0),Vector(0,0,1),Point(4.5,0,4.5),1, Color(1,1,1));
+        forms_list[number_of_forms] = cube_un;
+        number_of_forms++;
+
+        Cube* cube_deux = NULL;
+        cube_deux = new Cube(Vector(1,0,0),Vector(0,0,1),Point(-4.5,0,-4.5),1, Color(1,1,1));
+        forms_list[number_of_forms] = cube_deux;
+        number_of_forms++;
+
+        Cube* cube_trois = NULL;
+        cube_trois = new Cube(Vector(1,0,0),Vector(0,0,1),Point(-4.5,0,4.5),1, Color(1,1,1));
+        forms_list[number_of_forms] = cube_trois;
+        number_of_forms++;
+
+//        Cube* cube_quatre = NULL;
+//        cube_quatre = new Cube(Vector(1,0,0),Vector(0,0,1),Point(4.5,0,-4.5),1, Color(1,1,1));
+//        forms_list[number_of_forms] = cube_quatre;
+//        number_of_forms++;
+
 
         //Cube* cube_un = NULL;
         //cube_un = new Cube(Vector(1,0,0),Vector(0,1,0),Vector(0,0,1),Point(0.0,1,0.0),1, Color(1,1,1));
@@ -392,19 +423,14 @@ int main(int argc, char* args[])
 
         /****    Création de l objet TEMPORAIRE *****/
         Cube* temp = NULL;
-        temp = new Cube(Vector(1,0,0),Vector(0,1,0),Vector(0,0,1),Point(0,1,0),1, Color(0,1,0));
+        temp = new Cube(Vector(1,0,0),Vector(0,0,1),1, Color(0,1,0));
 
 
         /****    Creation de la Rotule *****/
 
-        double x2=0;
-        double y2=0;
-        double z2=0;
-
-        Point pt2 = Point(x2,y2,z2);
 
         Rotule *rotule = NULL;
-        rotule = new Rotule(pt2);
+        rotule = new Rotule(Point(0,-.5,0));
 
 
         /***** MAIN *****/
@@ -457,6 +483,12 @@ int main(int argc, char* args[])
                     case SDLK_q: //x--
                         temp->setX(-0.5);
                         break;
+                    case SDLK_m: //x++
+                        camera_position.setPos(Point(camera_position.getPos().x,camera_position.getPos().y,camera_position.getPos().z+5));
+                        break;
+                    case SDLK_p: //x++
+                        camera_position.setPos(Point(camera_position.getPos().x,camera_position.getPos().y,camera_position.getPos().z-5));
+                        break;
                     case SDLK_d: //x++
                         temp->setX(.5);
                         break;
@@ -470,7 +502,7 @@ int main(int argc, char* args[])
                             SCORE++; //incrementation du score
 
                             //créer un nouveau cube dans la liste temporaire
-                            temp = new Cube(Vector(1,0,0),Vector(0,1,0),Vector(0,0,1),Point(0,1,0),1, Color(0,1,0));
+                            temp = new Cube(Vector(1,0,0),Vector(0,0,1),1, Color(0,1,0));
                         }
                         break;
                     default:

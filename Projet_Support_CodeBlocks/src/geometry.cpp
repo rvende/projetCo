@@ -5,11 +5,13 @@
 using namespace std;
 
 
-void Point::translate(const Vector &v)
+Point Point::translate(const Vector &v)
 {
-    x += v.x;
-    y += v.y;
-    z += v.z;
+    Point res;
+    res.x = x+ v.x;
+    res.y += y+v.y;
+    res.z += z+v.z;
+    return res;
 }
 
 
@@ -23,7 +25,7 @@ Vector::Vector(Point p1, Point p2)
 Vector::Vector(Point p)
 {
     x = p.x;
-    y = 0;
+    y = p.y;
     z = p.z;
 }
 
