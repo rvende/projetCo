@@ -198,7 +198,10 @@ void Planche::calculOrientation(Form* formlist[MAX_FORMS_NUMBER])
         total+=produit;
         i++;
     }
-    //total.x/=momentx
+    total.x/=momentxyz.x;
+    total.y/=momentxyz.y;
+    total.y/=momentxyz.y;
+
 
     //anim.setAccel(total);
 
