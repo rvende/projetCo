@@ -39,15 +39,6 @@ double Vector::norm()
     return norm;
 }
 
-Vector Vector::produitVectoriel(const Vector &v)
-{
-    Vector res;
-
-    res.x = y*v.z - z*v.y;
-    res.y = z*v.x - x*v.z;
-    res.z = x*v.y - y*v.x;
-    return res;
-}
 
 Vector Vector::integral(double delta_t)
 {
@@ -68,14 +59,6 @@ void Vector::operator+=(const Vector &v)
     z += v.z;
 }
 
-Vector Vector::operator*(const Vector v)
-{
-    Vector res;
-    res.x = x*v.x;
-    res.y = y*v.y;
-    res.z = z*v.z;
-    return res;
-}
 
 
 double dist(Point p1, Point p2)

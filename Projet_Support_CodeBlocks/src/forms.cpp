@@ -5,6 +5,7 @@
 
 
 using namespace std;
+#define GRAVITE 9.8
 
 OrientVectors Form::update(double delta_t)
 {
@@ -166,9 +167,9 @@ void Planche::calculOrientation(Form* formlist[MAX_FORMS_NUMBER])
         Vector vect = Vector(pos);
         //cout << vect.x << " " << vect.y << " " << vect.z <<endl;
         double masse = formlist[i]->getPoids();
-        Vector vectPoids = Vector(0,-0.001,0);
+        Vector vectPoids = Vector(0,-.01,0);
         //cout << vectPoids.x << " " << vectPoids.y << " " << vectPoids.z <<endl;
-        Vector produit = vect.produitVectoriel(vectPoids);
+        Vector produit = vect^vectPoids;
         total+=produit;
         i++;
     }
@@ -192,9 +193,12 @@ Point Planche::getPosPlanche(){
 Cube::Cube(Vector v1, Vector v2, Point pos, float p, Color cl){
     V1 = (1/v1.norm())*v1;
     V2 = (1/v2.norm())*v2;
+    Vector norme = V2^V1;
     posPlanche = pos;
     poids = p;
     col = cl;
+    Point point = Point(0,0,0);
+    anim.setPos(point.translate(0.5*norme + posPlanche.x*V1 + posPlanche.z * V2));
 }
 
 // CODE LIE AU CUBE
@@ -202,9 +206,12 @@ Cube::Cube(Vector v1,Vector v2,float p, Color cl)
 {
     V1 = (1/v1.norm())*v1;
     V2 = (1/v2.norm())*v2;
+    Vector norme = V2^V1;
     posPlanche = Point(0,0,0);
     poids = p;
     col = cl;
+    Point point = Point(0,0,0);
+    anim.setPos(point.translate(0.5*norme));
 }
 
 void Cube::setOrient(Vector v1,Vector v2){
@@ -241,9 +248,23 @@ void Cube::setColor(Color cl){
 }
 
 OrientVectors Cube::update(double delta_t){
+    Vector Vpoids = Vector (0,-GRAVITE *poids,0);
     Vector norme = V2^V1;
-    Point pos = Point(0,0,0);
-    anim.setPos(pos.translate(0.5*norme+posPlanche.x*V1 + posPlanche.z*V2));
+    Vector tangentiel = (1.0/poids) *(Vpoids - (Vpoids*(-norme))*(-norme));
+    Vector vitesse = anim.getSpeed();
+    vitesse.x += tangentiel.x*delta_t;
+    vitesse.y += tangentiel.y*delta_t;
+    vitesse.z += tangentiel.z*delta_t;
+    anim.setSpeed(vitesse);
+    Point pos = anim.getPos();
+    pos.x += vitesse.x*delta_t;
+    pos.y += vitesse.y*delta_t;
+    pos.z += vitesse.z*delta_t;
+    //anim.setPos(point.translate(0.5*norme + posPlanche.x*V1 + posPlanche.z * V2));
+    Vector position = Vector(Point(0,0,0),pos);
+    double projection = position*norme;
+    pos = pos.translate((0.5-projection)*norme);
+    anim.setPos(pos);
     return OrientVectors();
 }
 

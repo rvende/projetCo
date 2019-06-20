@@ -372,9 +372,10 @@ int main(int argc, char* args[])
     }
     else
     {
+
         // Main loop flag
         bool quit = false;
-        Uint32 current_time, previous_time, elapsed_time;
+        Uint32 current_time, previous_time, elapsed_time=0;
 
         // Event handler
         SDL_Event event;
@@ -515,13 +516,15 @@ int main(int argc, char* args[])
 
             }
 
-            // Update the scene
+            //Update the scene
             current_time = SDL_GetTicks(); // get the elapsed time from SDL initialization (ms)
             elapsed_time = current_time - previous_time;
-            if (elapsed_time > ANIM_DELAY)
+           if (elapsed_time > ANIM_DELAY)
             {
                 previous_time = current_time;
                 update(planche, forms_list, temp, 1e-3 * elapsed_time); // International system units : seconds
+                //elapsed_time += ANIM_DELAY;
+                //update(planche, forms_list, temp, 1e-3 * elapsed_time); // International system units : seconds
             }
 
             // Render the scene
