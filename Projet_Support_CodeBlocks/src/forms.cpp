@@ -211,6 +211,10 @@ void Planche::calculOrientation(Form* formlist[MAX_FORMS_NUMBER])
 
 }
 
+void Planche::impulsion(Point pos){
+
+}
+
 void Planche::setOrient(Vector v1, Vector v2){
 
 }
@@ -279,7 +283,7 @@ void Cube::setColor(Color cl){
 OrientVectors Cube::update(double delta_t){
     Vector Vpoids = Vector (0,-GRAVITE *poids,0);
     Vector norme = V2^V1;
-    Vector tangentiel = (1.0/poids) *(Vpoids - (Vpoids*(-norme))*(-norme));
+    Vector tangentiel = 0.18*(1.0/poids) *(Vpoids - (Vpoids*(-norme))*(-norme));
     Vector vitesse = anim.getSpeed();
     vitesse.x += tangentiel.x*delta_t;
     vitesse.y += tangentiel.y*delta_t;
@@ -289,12 +293,18 @@ OrientVectors Cube::update(double delta_t){
     pos.x += vitesse.x*delta_t;
     pos.y += vitesse.y*delta_t;
     pos.z += vitesse.z*delta_t;
-    //anim.setPos(point.translate(0.5*norme + posPlanche.x*V1 + posPlanche.z * V2));
     Vector position = Vector(Point(0,0,0),pos);
+    //projection
     double projection = position*norme;
     pos = pos.translate((0.5-projection)*norme);
     anim.setPos(pos);
     return OrientVectors();
+}
+
+void Cube::updatetemp(){
+    Vector norme = V2^V1;
+    Point point = Point(0,0,0);
+    anim.setPos(point.translate(0.5*norme + posPlanche.x*V1 + posPlanche.z * V2));
 }
 
 Point Cube::getPosPlanche(){

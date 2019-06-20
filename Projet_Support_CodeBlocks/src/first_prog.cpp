@@ -271,7 +271,7 @@ void update(Planche* planche, Form* formlist[MAX_FORMS_NUMBER], Cube* temp, doub
     if (temp != NULL){
         temp->collision(formlist);
         temp->setOrient(orient.V1,orient.V2);
-        temp->update(delta_t);
+        temp->updatetemp();
     }
 
     while(formlist[i] != NULL)
@@ -503,6 +503,7 @@ int main(int argc, char* args[])
                         // SI PAS ROUGE = JE PEUX POSER
                         if(temp->getColor().r != 1){
                             // ajoute le cube temporaire à la liste de cube
+                            temp->updatetemp();
                             forms_list[number_of_forms]=temp;
                             number_of_forms++;
                             temp->setColor(WHITE);

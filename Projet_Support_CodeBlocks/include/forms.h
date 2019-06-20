@@ -78,6 +78,7 @@ public:
     void render();
     void calculOrientation(Form* formlist[MAX_FORMS_NUMBER]);
     void setOrient(Vector v1, Vector v2);
+    void impulsion(Point pos);
     Vector vecteurX();
     Vector vecteurY();
     Point getPosPlanche();
@@ -105,6 +106,8 @@ public:
     Point getPosPlanche();
     //ABSTRACTION
     OrientVectors update(double delta_t);
+    void updatetemp();
+    void setPos();
     void render();
 
 
