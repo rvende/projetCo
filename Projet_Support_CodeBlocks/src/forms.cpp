@@ -20,6 +20,7 @@ void Form::setOrient(Vector v1, Vector v2)
 Point Form::getPosPlanche(){
     return Point();
 }
+
 void Form::render()
 {
     // Point of view for rendering
@@ -105,14 +106,25 @@ OrientVectors Planche::update(double delta_t)
             anim.setAccel(Vector(acceleration.x,acceleration.y,0));
         anim.setSpeed(Vector(vitesse.x,vitesse.y,0));
     }
-    if (abs(acceleration.x) < (10^(-4))){
+    cout << acceleration.x << " "<< acceleration.y << " "<< acceleration.z << endl;
+    if ((acceleration.x < 0.0001)&&(acceleration.x > -0.0001)){
         if (phi < 0)
         {
-            phi += 0.1;
+            phi += 0.001;
         }
         if (phi > 0)
         {
-            phi -= 0.1;
+            phi -= 0.001;
+        }
+    }
+    if ((acceleration.z < 0.000001)&&(acceleration.z > -0.000001)){
+        if (theta < 0)
+        {
+            theta += 0.001;
+        }
+        if (theta > 0)
+        {
+            theta -= 0.001;
         }
     }
     anim.setPhi(phi);
@@ -133,6 +145,10 @@ Vector Planche::vecteurY(){
     V2 = Vector(sin(theta)*sin(phi), -cos(theta)*sin(phi),cos(phi));
     V2 = (1/V2.norm())*V2;
     return V2;
+}
+
+bool Form::getFin(){
+    return fin;
 }
 
 void Planche::render()
@@ -205,18 +221,15 @@ void Planche::calculOrientation(Form* formlist[MAX_FORMS_NUMBER])
             Vector vect = Vector(pos);
             //cout << vect.x << " " << vect.y << " " << vect.z <<endl;
             double masse = formlist[i]->getPoids();
-            Vector vectPoids = Vector(0,-.01,0);
+            Vector vectPoids = Vector(0,-masse*GRAVITE,0);
             //cout << vectPoids.x << " " << vectPoids.y << " " << vectPoids.z <<endl;
             Vector produit = vect^vectPoids;
             total+=produit;
-            i++;
         }
+        i++;
     }
-    //total.x/=momentx
-
-    //anim.setAccel(total);
-
-    //total.x/=momentx;
+    total.x/=momentxyz.x;
+    total.z/=momentxyz.z;
     anim.setAccel(total);
 
 }
@@ -297,6 +310,7 @@ OrientVectors Cube::update(double delta_t){
     double projection = position*norme;
     pos = pos.translate((0.5-projection)*norme);
     anim.setPos(pos);
+    estSorti();
     return OrientVectors();
 }
 
@@ -391,8 +405,14 @@ void Cube::collision(Form* formlist[MAX_FORMS_NUMBER])
 }
 
 void Cube::estSorti(){
-    Point pos = anim.getPos();
+    Vector proj = Vector(Point(),anim.getPos());
+    double x = proj*V1;
+    double z = proj*V2;
 
+    if ((x < -5.0)||(x>5.0)||(z>5.0)||(z<-5.0)){
+        fin = true;
+        //VIE--;
+    }
 }
 
 Rotule::Rotule(Point centre)

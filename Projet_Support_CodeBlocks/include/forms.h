@@ -7,6 +7,7 @@
 
 #define MAX_FORMS_NUMBER 50
 
+
 class Color
 {
 public:

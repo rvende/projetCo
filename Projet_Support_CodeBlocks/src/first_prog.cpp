@@ -265,10 +265,6 @@ bool initGL()
     return success;
 }
 
-bool Form::getFin(){
-    return fin;
-}
-
 void update(Planche* planche, Form* formlist[MAX_FORMS_NUMBER], Cube* temp, double delta_t)
 {
     // Update the list of forms
@@ -298,6 +294,18 @@ const void render(Rotule* rotule,Planche* planche, Form* formlist[MAX_FORMS_NUMB
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
     gluOrtho2D(10, SCREEN_WIDTH, SCREEN_HEIGHT, 0 ); // Taille de la fenêtre, 800x600 pixels
+
+    unsigned int i = 0;
+    unsigned int compteur = 0;
+    while (formlist[i]!= NULL)
+    {
+        if (formlist[i]->getFin()){
+            compteur++;
+        }
+        i++;
+    }
+    VIE = 3-compteur;
+
     //Color(0,255,0);
     afficherScore();
     glLoadIdentity();
@@ -340,14 +348,17 @@ const void render(Rotule* rotule,Planche* planche, Form* formlist[MAX_FORMS_NUMB
     glPushMatrix();
     planche->render();
     glPopMatrix();
-    unsigned int i = 0;
+    i = 0;
     while (formlist[i]!= NULL)
     {
-        glPushMatrix(); // Preserve the camera viewing point for further forms
-        formlist[i]->render();
-        glPopMatrix(); // Restore the camera viewing point for next object
+        if (!formlist[i]->getFin()){
+            glPushMatrix(); // Preserve the camera viewing point for further forms
+            formlist[i]->render();
+            glPopMatrix(); // Restore the camera viewing point for next object
+        }
         i++;
     }
+
     if (temp != NULL){
         glPushMatrix();
         temp->render();
@@ -520,6 +531,11 @@ int main(int argc, char* args[])
 
             // Update window screen
             SDL_GL_SwapWindow(gWindow);
+            if (VIE <= 0){
+                quit = true;
+                cout <<"Vous avez perdu ! Score = "<<SCORE<<endl;
+                Sleep(5000);
+            }
         }
     }
 
