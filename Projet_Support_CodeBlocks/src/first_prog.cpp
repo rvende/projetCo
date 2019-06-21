@@ -262,6 +262,10 @@ bool initGL()
     return success;
 }
 
+bool Form::getFin(){
+    return fin;
+}
+
 void update(Planche* planche, Form* formlist[MAX_FORMS_NUMBER], Cube* temp, double delta_t)
 {
     // Update the list of forms
@@ -430,7 +434,7 @@ int main(int argc, char* args[])
 
         /****    Création de l objet TEMPORAIRE *****/
         Cube* temp = NULL;
-        temp = new Cube(Vector(1,0,0),Vector(0,0,1),1, Color(0,1,0));
+        temp = new Cube();
 
 
         /****    Creation de la Rotule *****/
@@ -510,7 +514,7 @@ int main(int argc, char* args[])
                             SCORE++; //incrementation du score
 
                             //créer un nouveau cube dans la liste temporaire
-                            temp = new Cube(Vector(1,0,0),Vector(0,0,1),1, Color(0,1,0));
+                            temp = new Cube();
                         }
                         break;
                     default:

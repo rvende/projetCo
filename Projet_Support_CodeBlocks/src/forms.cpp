@@ -100,10 +100,20 @@ OrientVectors Planche::update(double delta_t)
         anim.setSpeed(Vector(vitesse.x,vitesse.y,0));
     }
 
-    if(((theta*180/3.14159)<=-angleMax) ){
+    if((theta*180/3.14159)<=-angleMax){
             theta = -angleMax*3.14159/180;
             anim.setAccel(Vector(acceleration.x,acceleration.y,0));
         anim.setSpeed(Vector(vitesse.x,vitesse.y,0));
+    }
+    if (abs(acceleration.x) < (10^(-4))){
+        if (phi < 0)
+        {
+            phi += 0.1;
+        }
+        if (phi > 0)
+        {
+            phi -= 0.1;
+        }
     }
     anim.setPhi(phi);
     anim.setTheta(theta);
@@ -189,15 +199,18 @@ void Planche::calculOrientation(Form* formlist[MAX_FORMS_NUMBER])
     unsigned int i = 0;
     while (formlist[i]!= NULL)
     {
-        Point pos = formlist[i]->getPosition();
-        Vector vect = Vector(pos);
-        //cout << vect.x << " " << vect.y << " " << vect.z <<endl;
-        double masse = formlist[i]->getPoids();
-        Vector vectPoids = Vector(0,-.01,0);
-        //cout << vectPoids.x << " " << vectPoids.y << " " << vectPoids.z <<endl;
-        Vector produit = vect^vectPoids;
-        total+=produit;
-        i++;
+        if (!formlist[i]->getFin())
+        {
+            Point pos = formlist[i]->getPosition();
+            Vector vect = Vector(pos);
+            //cout << vect.x << " " << vect.y << " " << vect.z <<endl;
+            double masse = formlist[i]->getPoids();
+            Vector vectPoids = Vector(0,-.01,0);
+            //cout << vectPoids.x << " " << vectPoids.y << " " << vectPoids.z <<endl;
+            Vector produit = vect^vectPoids;
+            total+=produit;
+            i++;
+        }
     }
     total.x/=momentxyz.x;
     total.y/=momentxyz.y;
@@ -223,29 +236,18 @@ Point Planche::getPosPlanche(){
     return Point();
 }
 
-Cube::Cube(Vector v1, Vector v2, Point pos, float p, Color cl){
-    V1 = (1/v1.norm())*v1;
-    V2 = (1/v2.norm())*v2;
+Cube::Cube(){
+    fin = FALSE;
+    V1 = Vector(1,0,0);
+    V2 = Vector(0,0,1);
     Vector norme = V2^V1;
-    posPlanche = pos;
-    poids = p;
-    col = cl;
+    posPlanche = Point(0,0,0);
+    poids = 1;
+    col = Color(1,1,1);
     Point point = Point(0,0,0);
     anim.setPos(point.translate(0.5*norme + posPlanche.x*V1 + posPlanche.z * V2));
 }
 
-// CODE LIE AU CUBE
-Cube::Cube(Vector v1,Vector v2,float p, Color cl)
-{
-    V1 = (1/v1.norm())*v1;
-    V2 = (1/v2.norm())*v2;
-    Vector norme = V2^V1;
-    posPlanche = Point(0,0,0);
-    poids = p;
-    col = cl;
-    Point point = Point(0,0,0);
-    anim.setPos(point.translate(0.5*norme));
-}
 
 void Cube::setOrient(Vector v1,Vector v2){
     V1 = v1;
@@ -283,7 +285,7 @@ void Cube::setColor(Color cl){
 OrientVectors Cube::update(double delta_t){
     Vector Vpoids = Vector (0,-GRAVITE *poids,0);
     Vector norme = V2^V1;
-    Vector tangentiel = 0.18*(1.0/poids) *(Vpoids - (Vpoids*(-norme))*(-norme));
+    Vector tangentiel = 0.05*(1.0/poids) *(Vpoids - (Vpoids*(-norme))*(-norme));
     Vector vitesse = anim.getSpeed();
     vitesse.x += tangentiel.x*delta_t;
     vitesse.y += tangentiel.y*delta_t;

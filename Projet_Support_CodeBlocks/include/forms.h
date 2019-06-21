@@ -36,6 +36,7 @@ protected:
     Animation anim;
     double poids;
     Vector V1,V2;
+    bool fin;
 public:
     Animation& getAnim() {return anim;}
     void setAnim(Animation ani) {anim = ani;}
@@ -51,6 +52,7 @@ public:
     virtual Point getPosPlanche();
     void setColor(Color cl);
     virtual void setOrient(Vector v1, Vector v2);
+    bool getFin();
 };
 // A face of a cube
 class Rotule : public Form
@@ -91,8 +93,7 @@ private:
     Point posPlanche;
 public:
     // methodes des vecteurs
-    Cube(Vector v1,Vector v2,float p,Color cl);
-    Cube(Vector v1, Vector v2, Point pos, float p,Color c1);
+    Cube();
     void setOrient(Vector v1,Vector v2);
     void setX(double inc);
     void setZ(double inc);
@@ -109,7 +110,7 @@ public:
     void updatetemp();
     void setPos();
     void render();
-
+    void estSorti();
 
 };
 
