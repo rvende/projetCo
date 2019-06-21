@@ -63,10 +63,10 @@ Planche::Planche(Point centre){
     V2 = Vector(0,0,1);
     col = Color(0.941, 0.529, 0.569);
 
-     l = 10;
-     h = 0.5;
-     masse = 9;
-     momentxyz = Vector((masse/12)*(l*l+h*h), (masse/12)*(l*l+h*h), (masse/12)*(l*l+h*h));
+    l = 10;
+    h = 0.5;
+    poids = 150;
+    momentxyz = Vector((poids/12)*(l*l+h*h), (poids/12)*(l*l+h*h), (poids/12)*(l*l+h*h));
 }
 
 OrientVectors Planche::update(double delta_t)
@@ -295,7 +295,7 @@ void Cube::setColor(Color cl){
 OrientVectors Cube::update(double delta_t){
     Vector Vpoids = Vector (0,-GRAVITE *poids,0);
     Vector norme = V2^V1;
-    Vector tangentiel = 0.05*(1.0/poids) *(Vpoids - (Vpoids*(-norme))*(-norme));
+    Vector tangentiel = 0.02*(1.0/poids) *(Vpoids - (Vpoids*(-norme))*(-norme));
     Vector vitesse = anim.getSpeed();
     vitesse.x += tangentiel.x*delta_t;
     vitesse.y += tangentiel.y*delta_t;
@@ -385,7 +385,7 @@ void Cube::collision(Form* formlist[MAX_FORMS_NUMBER])
     while (formlist[i]!= NULL)
     {
 
-        Vector proj = Vector(formlist[i]->getPosition(),Point());
+        Vector proj = Vector(Point(),formlist[i]->getPosition());
 
         double x = proj*V1;
         double z = proj*V2;

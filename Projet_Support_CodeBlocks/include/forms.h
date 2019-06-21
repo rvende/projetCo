@@ -70,9 +70,8 @@ class Planche : public Form
 {
 private:
     Vector momentxyz;
-        double l;
-        double h;
-        double masse;
+    double l;
+    double h;
 public:
     Planche(Point org = Point());
     Vector getV1();

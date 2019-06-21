@@ -474,10 +474,10 @@ int main(int argc, char* args[])
                         camera_position.setPhi(camera_position.getPhi()-10);
                         break;
                     case SDLK_z: //z++
-                        temp->setZ(.5);
+                        temp->setZ(-.5);
                         break;
                     case SDLK_s: //z--
-                        temp->setZ(-0.5);
+                        temp->setZ(0.5);
                         break;
                     case SDLK_q: //x--
                         temp->setX(-0.5);
