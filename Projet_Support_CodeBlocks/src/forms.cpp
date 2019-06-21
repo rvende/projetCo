@@ -370,8 +370,13 @@ void Cube::collision(Form* formlist[MAX_FORMS_NUMBER])
     unsigned int i = 0;
     while (formlist[i]!= NULL)
     {
-        Point pos2 = formlist[i]->getPosPlanche();
-        if (((posPlanche.x - pos2.x)< 1)&&((posPlanche.x - pos2.x)> -1)&&((posPlanche.z - pos2.z)< 1)&&((posPlanche.z - pos2.z)> -1)){
+
+        Vector proj = Vector(formlist[i]->getPosition(),Point());
+
+        double x = proj*V1;
+        double z = proj*V2;
+
+        if (((x - posPlanche.x)< 1)&&((x - posPlanche.x)> -1)&&((z - posPlanche.z)< 1)&&((z - posPlanche.z)> -1)){
            // cout <<"rouge"<<endl;
             rouge = true;
         }

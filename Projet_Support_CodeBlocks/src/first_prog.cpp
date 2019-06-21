@@ -118,6 +118,7 @@ const GLubyte GL_FONT_DATA[] [12]= {
 {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x98, 0x64, 0x00, 0x00, 0x00, 0x00}};
 
 int SCORE = 0;
+int VIE = 3;
 // Screen dimension constants
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
@@ -147,14 +148,21 @@ void close(SDL_Window** window);
 /* Functions implementations                                               */
 /***************************************************************************/
 // affichage du score passe en parametre
-void afficherScore(int score)
+void afficherScore()
 {
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    string out_string;
-    stringstream ss;
-    ss << score;
-    out_string = ss.str();
-	string textScore =  "Score : " +out_string;
+
+    string out_string_score;
+    stringstream ss_score;
+    ss_score << SCORE;
+    out_string_score = ss_score.str();
+
+    string out_string_vie;
+    stringstream ss_vie;
+    ss_vie << VIE;
+    out_string_vie = ss_vie.str();
+
+	string textScore =  "Score : " +out_string_score+" | Vie : "+out_string_vie;
     glColor3f(0,1,20);
 	glRasterPos3f(0,10,3);
 
@@ -291,7 +299,7 @@ const void render(Rotule* rotule,Planche* planche, Form* formlist[MAX_FORMS_NUMB
     glLoadIdentity();
     gluOrtho2D(10, SCREEN_WIDTH, SCREEN_HEIGHT, 0 ); // Taille de la fenêtre, 800x600 pixels
     //Color(0,255,0);
-    afficherScore(SCORE);
+    afficherScore();
     glLoadIdentity();
 
     Point pos = cam_pos.getPos();
@@ -395,6 +403,7 @@ int main(int argc, char* args[])
         {
             forms_list[i] = NULL;
         }
+
 
         /****    Création de la planche*****/
         Planche *planche = NULL;
