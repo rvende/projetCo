@@ -385,6 +385,11 @@ void Cube::collision(Form* formlist[MAX_FORMS_NUMBER])
     }
 }
 
+void Cube::estSorti(){
+    Point pos = anim.getPos();
+
+}
+
 Rotule::Rotule(Point centre)
 {
     anim.setPos(centre);

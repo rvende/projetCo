@@ -395,32 +395,6 @@ int main(int argc, char* args[])
         {
             forms_list[i] = NULL;
         }
-        //ESSAI
-        Cube* cube_un = NULL;
-        cube_un = new Cube(Vector(1,0,0),Vector(0,0,1),Point(4.5,0,4.5),1, Color(1,1,1));
-        forms_list[number_of_forms] = cube_un;
-        number_of_forms++;
-
-        Cube* cube_deux = NULL;
-        cube_deux = new Cube(Vector(1,0,0),Vector(0,0,1),Point(-4.5,0,-4.5),1, Color(1,1,1));
-        forms_list[number_of_forms] = cube_deux;
-        number_of_forms++;
-
-        Cube* cube_trois = NULL;
-        cube_trois = new Cube(Vector(1,0,0),Vector(0,0,1),Point(-4.5,0,4.5),1, Color(1,1,1));
-        forms_list[number_of_forms] = cube_trois;
-        number_of_forms++;
-
-//        Cube* cube_quatre = NULL;
-//        cube_quatre = new Cube(Vector(1,0,0),Vector(0,0,1),Point(4.5,0,-4.5),1, Color(1,1,1));
-//        forms_list[number_of_forms] = cube_quatre;
-//        number_of_forms++;
-
-
-        //Cube* cube_un = NULL;
-        //cube_un = new Cube(Vector(1,0,0),Vector(0,1,0),Vector(0,0,1),Point(0.0,1,0.0),1, Color(1,1,1));
-        //forms_list[number_of_forms] = cube_un;
-        //number_of_forms++;
 
         /****    Création de la planche*****/
         Planche *planche = NULL;
